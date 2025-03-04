@@ -7,7 +7,7 @@ from tqdm import tqdm
 from accelerate import Accelerator
 
 from preprocessor import load_and_preprocess
-from .qwen import load_qwen
+from .src.qwen import load_qwen
 
 
 # LoRA implementation
