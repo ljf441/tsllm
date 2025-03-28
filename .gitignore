@@ -2,3 +2,9 @@ src/wandb/*
 src/__pycache__/*
 src/.ipynb_checkpoints/*
 src/.pytest_cache/*
+models/*
+src/tokenized_data.pkl
+src/full_tokenized_data.pkl
+src/preloaded_data.pkl
+src/metrics_results.csv
+src/wandb/*
