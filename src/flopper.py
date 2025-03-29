@@ -161,6 +161,10 @@ class Flopper:
     def compute_flops(self):
         self.total_flops = self.num_steps_training*self.forward_and_back()
         return self.total_flops
+
+    def compute_validation(self):
+        self.total_flops = self.forward_pass()
+        return self.total_flops
     
 
 def parse_args():

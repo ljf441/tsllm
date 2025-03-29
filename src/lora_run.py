@@ -43,12 +43,12 @@ lora_alpha = 2*lora_rank
 batch_size = 4
 learning_rate = 1e-4
 test_size = 0.2
-max_steps = 30000
+max_steps = 15000
 max_ctx_length = 768
 points = 80
 T_max = max_steps
 
-run_name = "CSD3"
+run_name = "CSD3_15k"
 
 # wandb.init(project="lora_qwen", config={
 #     "learning_rate": learning_rate,
