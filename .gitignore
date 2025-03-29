@@ -2,7 +2,10 @@ src/wandb/*
 src/__pycache__/*
 src/.ipynb_checkpoints/*
 src/.pytest_cache/*
-models/*
+models/*.pkl
+models/*.joblib
+results/*.joblib
+results/*.pkl
 src/tokenized_data.pkl
 src/full_tokenized_data.pkl
 src/preloaded_data.pkl
