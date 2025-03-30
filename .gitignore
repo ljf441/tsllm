@@ -11,3 +11,4 @@ src/full_tokenized_data.pkl
 src/preloaded_data.pkl
 src/metrics_results.csv
 src/wandb/*
+machine.file.*
