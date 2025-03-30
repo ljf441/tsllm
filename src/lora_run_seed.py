@@ -39,7 +39,7 @@ plt.rc('legend', fontsize=SMALL_SIZE)
 plt.rc('figure', titlesize=BIGGER_SIZE)
 
 lora_rank = 8
-lora_alpha = lora_rank
+lora_alpha = 2*lora_rank
 batch_size = 4
 learning_rate = 1e-4
 test_size = 0.2
@@ -48,7 +48,7 @@ max_ctx_length = 768
 points = 80
 T_max = max_steps
 
-run_name = "CSD3_15k_seed_defaults"
+run_name = "CSD3_15k_seed"
 
 np.random.seed(442)
 # wandb.init(project="lora_qwen", config={
@@ -200,7 +200,7 @@ optimizer = torch.optim.Adam(
 )
 
 # scheduler = StepLR(optimizer, step_size=step_size, gamma=gamma)
-# scheduler = CosineAnnealingLR(optimizer, T_max=max_steps)
+scheduler = CosineAnnealingLR(optimizer, T_max=max_steps)
 # scheduler = get_cosine_schedule_with_warmup(optimizer, num_warmup_steps=warmup_steps, num_training_steps=num_training_steps)
 
 train_dataset = TensorDataset(train_input_ids)
@@ -214,8 +214,9 @@ test_loader = DataLoader(test_dataset, shuffle=False)
 
 # Prepare components with Accelerator
 accelerator = Accelerator()
-model, optimizer, train_loader, val_loader = accelerator.prepare(model, optimizer, 
+model, optimizer, train_loader, scheduler, val_loader = accelerator.prepare(model, optimizer, 
                                                                                          train_loader, 
+                                                                                         scheduler, 
                                                                                          val_loader
                                                                                          )
 
@@ -233,6 +234,7 @@ while steps < max_steps:
         train_losses.append([loss.item(), steps])
         accelerator.backward(loss)
         optimizer.step()
+        scheduler.step()
         steps += 1
 
         progress_bar.set_postfix(loss=loss.item())
@@ -284,6 +286,7 @@ lora_state_dict['config'] = {
 # Save to file
 torch.save(lora_state_dict, f"../models/{run_name}_lora_weights.pt")
 torch.save(optimizer.state_dict(), f"../models/{run_name}_optimizer_state.pth")
+torch.save(scheduler.state_dict(), f"../models/{run_name}_scheduler_state.pth")
 
 
 train_losses = np.array(train_losses)

@@ -197,7 +197,7 @@ for rank in lora_ranks:
         np.random.seed(442)
         lora_rank = rank
         learning_rate = lr
-        lora_alpha = lora_rank
+        lora_alpha = 2*lora_rank
 
         # Load the model and tokenizer
         model, tokenizer = load_qwen()
@@ -321,7 +321,7 @@ for rank in lora_ranks:
         grid_result = move_to_cpu(grid_results)
 
         # Save results
-        torch.save(grid_results, f"../results/grid_results_{lora_rank}_{learning_rate}.pt")
+        torch.save(grid_results, f"../results/grid_results_{lora_rank}_{learning_rate}_alpha.pt")
         # joblib.dump(grid_results, f"../results/grid_results_{lora_rank}_{learning_rate}.gz", compress=3)
 
 
@@ -382,7 +382,7 @@ all_val_loss = np.array(all_val_loss)
 all_keys = np.array(all_keys)
 
 lora_rank = best_overall_params['lora_rank']
-lora_alpha = lora_rank
+lora_alpha = 2*lora_rank
 learning_rate = best_overall_params['learning_rate']
 
 ctx_lengths = [128, 512, 768]
@@ -515,7 +515,7 @@ for ctx_length in ctx_lengths:
     grid_result = move_to_cpu(grid_results)
 
     # Save results
-    torch.save(grid_results, f"../results/grid_results_{max_ctx_length}.pt")
+    torch.save(grid_results, f"../results/grid_results_{max_ctx_length}_alpha.pt")
     # joblib.dump(grid_results, f"../results/grid_results_{max_ctx_length}.gz", compress=3)
     
     del train_losses
@@ -569,6 +569,6 @@ best_overall_params['max_ctx_length'] = best_ctx
 
 best_overall_params_cpu = move_to_cpu(best_overall_params)
 
-torch.save(best_overall_params_cpu, "../results/best_overall_params.pt")
+torch.save(best_overall_params_cpu, "../results/best_overall_params_alpha.pt")
 
 # joblib.dump(best_overall_params, "../results/best_overall_params.joblib")

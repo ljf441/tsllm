@@ -38,28 +38,19 @@ plt.rc('ytick', labelsize=SMALL_SIZE)
 plt.rc('legend', fontsize=SMALL_SIZE)
 plt.rc('figure', titlesize=BIGGER_SIZE)
 
-lora_rank = 8
-lora_alpha = lora_rank
+lora_rank = 4
+lora_alpha = 2*lora_rank
 batch_size = 4
-learning_rate = 1e-4
+learning_rate = 1e-5
 test_size = 0.2
-max_steps = 15000
-max_ctx_length = 768
+max_steps = 3000
+max_ctx_length = 512
 points = 80
-T_max = max_steps
+# T_max = max_steps
 
-run_name = "CSD3_15k_seed_defaults"
+run_name = "CSD3_default_alpha"
 
 np.random.seed(442)
-# wandb.init(project="lora_qwen", config={
-#     "learning_rate": learning_rate,
-#     "batch_size": batch_size,
-#     "lora_rank": lora_rank,
-#     "max_steps": max_steps,
-#     "max_ctx_length": max_ctx_length,
-#     "test_and_val_size": test_size,
-#     "T_max": T_max
-# })
 
 def running_mse(prediction, actual):
     mse = []
@@ -199,10 +190,6 @@ optimizer = torch.optim.Adam(
     (p for p in model.parameters() if p.requires_grad), lr=learning_rate
 )
 
-# scheduler = StepLR(optimizer, step_size=step_size, gamma=gamma)
-# scheduler = CosineAnnealingLR(optimizer, T_max=max_steps)
-# scheduler = get_cosine_schedule_with_warmup(optimizer, num_warmup_steps=warmup_steps, num_training_steps=num_training_steps)
-
 train_dataset = TensorDataset(train_input_ids)
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 
@@ -215,9 +202,9 @@ test_loader = DataLoader(test_dataset, shuffle=False)
 # Prepare components with Accelerator
 accelerator = Accelerator()
 model, optimizer, train_loader, val_loader = accelerator.prepare(model, optimizer, 
-                                                                                         train_loader, 
-                                                                                         val_loader
-                                                                                         )
+                                                                                    train_loader, 
+                                                                                    val_loader
+                                                                                    )
 
 # Train the model
 steps = 0
