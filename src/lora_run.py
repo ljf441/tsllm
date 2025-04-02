@@ -43,12 +43,12 @@ lora_alpha = lora_rank
 batch_size = 4
 learning_rate = 1e-4
 test_size = 0.2
-max_steps = 15000
+max_steps = 16000
 max_ctx_length = 768
 points = 80
-T_max = max_steps
+# T_max = max_steps
 
-run_name = "CSD3_15k_seed_defaults"
+run_name = "CSD3_16k_seed_defaults_best"
 
 np.random.seed(442)
 # wandb.init(project="lora_qwen", config={
@@ -105,6 +105,23 @@ def move_to_cpu(obj):
     else:
         # Return Python primitives (int, float, etc.) as-is
         return obj
+    
+# class EarlyStopping:
+#     def __init__(self, patience=5, min_delta=0):
+#         self.patience = patience
+#         self.min_delta = min_delta
+#         self.best_loss = float("inf")
+#         self.counter = 0
+    
+#     def __call__(self, val_loss):
+#         if val_loss < self.best_loss - self.min_delta:
+#             self.best_loss = val_loss
+#             self.counter = 0
+#         else:
+#             self.counter += 1
+#             if self.counter >= self.patience:
+#                 return True
+#         return False
 
 
 class LoRALinear(nn.Module):
@@ -223,6 +240,8 @@ model, optimizer, train_loader, val_loader = accelerator.prepare(model, optimize
 steps = 0
 train_losses = []
 val_losses = []
+grad_track = []
+# early_stopping = EarlyStopping(patience=1, min_delta=0.001)
 while steps < max_steps:
     progress_bar = tqdm(train_loader, desc=f"Steps {steps}")
     for (batch,) in progress_bar:
@@ -232,6 +251,27 @@ while steps < max_steps:
         loss = outputs.loss
         train_losses.append([loss.item(), steps])
         accelerator.backward(loss)
+
+        layer_gradients = {}
+
+        for name, param in model.named_parameters():
+            if param.grad is None:
+                continue
+            if ("A" in name or "B" in name) and ("q_proj" in name or "v_proj" in name):
+                parts = name.split(".")
+                idx = parts[2]
+                proj = parts[4]
+                matrix = parts[-1]
+                key = "{}.{}.{}".format(idx, proj, matrix)
+                grad_norm = param.grad.detach().cpu().norm().item()
+                layer_gradients[(key)] = grad_norm
+
+        grad_track.append({
+            "step": steps,
+            "gradients": layer_gradients
+        })
+
+        
         optimizer.step()
         steps += 1
 
@@ -247,6 +287,9 @@ while steps < max_steps:
             avg_loss = evaluate_model(model, val_loader, steps)
             val_losses.append([avg_loss, steps])
             model.eval()
+
+        # if early_stopping(avg_loss):
+        #     break
 
             # wandb.log({
             # "val_loss": avg_loss,
@@ -293,6 +336,7 @@ results = {}
 
 results['train_losses'] = train_losses
 results['val_losses'] = val_losses
+results['grad_track'] = grad_track
 
 torch.cuda.empty_cache()
 accelerator = Accelerator()

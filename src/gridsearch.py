@@ -184,7 +184,7 @@ def move_to_cpu(obj):
 # Define constants
 batch_size = 4
 test_size = 0.2
-max_steps = 200
+max_steps  = 300
 max_ctx_length = 512
 points = 80
 
@@ -262,6 +262,7 @@ for rank in lora_ranks:
         steps = 0
         train_losses = []
         val_losses = []
+        grad_track = []
         early_stop_steps = min(max_steps, 500)  # Reduce training for grid search
 
         while steps < early_stop_steps:
@@ -273,6 +274,26 @@ for rank in lora_ranks:
                 loss = outputs.loss
                 train_losses.append([loss.item(), steps])
                 accelerator.backward(loss)
+
+                layer_gradients = {}
+
+                for name, param in model.named_parameters():
+                    if param.grad is None:
+                        continue
+                    if ("A" in name or "B" in name) and ("q_proj" in name or "v_proj" in name):
+                        parts = name.split(".")
+                        idx = parts[2]
+                        proj = parts[4]
+                        matrix = parts[-1]
+                        key = "{}.{}.{}".format(idx, proj, matrix)
+                        grad_norm = param.grad.detach().cpu().norm().item()
+                        layer_gradients[(key)] = grad_norm
+
+                grad_track.append({
+                    "step": steps,
+                    "gradients": layer_gradients
+                })
+
                 optimizer.step()
                 
                 if (steps % 50) == 0:
@@ -316,6 +337,7 @@ for rank in lora_ranks:
             "val_losses": val_losses,
             "test_decoded": test_decoded,
             "prediction_decoded": prediction_decoded,
+            "grad_track": grad_track
         }
 
         grid_result = move_to_cpu(grid_results)
@@ -455,6 +477,7 @@ for ctx_length in ctx_lengths:
     steps = 0
     train_losses = []
     val_losses = []
+    grad_track = []
     early_stop_steps = min(max_steps, 500)  # Reduce training for grid search
 
     while steps < early_stop_steps:
@@ -466,6 +489,26 @@ for ctx_length in ctx_lengths:
             loss = outputs.loss
             train_losses.append([loss.item(), steps])
             accelerator.backward(loss)
+
+            layer_gradients = {}
+
+            for name, param in model.named_parameters():
+                if param.grad is None:
+                    continue
+                if ("A" in name or "B" in name) and ("q_proj" in name or "v_proj" in name):
+                    parts = name.split(".")
+                    idx = parts[2]
+                    proj = parts[4]
+                    matrix = parts[-1]
+                    key = "{}.{}.{}".format(idx, proj, matrix)
+                    grad_norm = param.grad.detach().cpu().norm().item()
+                    layer_gradients[(key)] = grad_norm
+
+            grad_track.append({
+                "step": steps,
+                "gradients": layer_gradients
+            })
+            
             optimizer.step()
             
             if (steps % 50) == 0:
@@ -510,6 +553,7 @@ for ctx_length in ctx_lengths:
         "val_losses": val_losses,
         "test_decoded": test_decoded,
         "prediction_decoded": prediction_decoded,
+        "grad_track": grad_track
     }
 
     grid_result = move_to_cpu(grid_results)
