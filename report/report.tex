@@ -1,0 +1,372 @@
+%--------------------
+% Packages
+% -------------------
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+%\usepackage{gentium}
+\usepackage{mathptmx} % Use Times Font
+% \usepackage{wordcount}
+\usepackage{pdflscape}
+\usepackage[pdftex]{graphicx} % Required for including pictures
+\usepackage[pdftex,linkcolor=black,pdfborder={0 0 0}]{hyperref} % Format links for pdf
+\usepackage{calc} % To reset the counter in the document after title page
+\usepackage[numbers]{natbib}
+\usepackage{amssymb} % Required for \mathbb
+\usepackage{amsmath} % Required for bmatrix environment
+\frenchspacing % No double spacing between sentences
+\linespread{1.2} % Set linespace
+\usepackage[a4paper, lmargin=0.1666\paperwidth, rmargin=0.1666\paperwidth, tmargin=0.1111\paperheight, bmargin=0.1111\paperheight]{geometry} %margins
+%\usepackage{parskip}
+
+\usepackage[all]{nowidow} % Tries to remove widows
+\usepackage[protrusion=true,expansion=true]{microtype} % Improves typography, load after fontpackage is selected
+\newcommand{\apjs}{ApJS}
+\newcommand{\apj}{ApJ}
+\newcommand{\apjl}{ApJ}
+\newcommand{\mnras}{MNRAS}
+\newcommand{\aap}{A\&A}
+\newcommand{\aj}{AJ}
+\newcommand{\nat}{Nature}
+\newcommand{\bain}{Bull.~Astron.~Inst.~Netherlands} 
+\newcommand{\araa}{ARA\&A}
+\newcommand{\icarus}{Icarus}
+\setlength{\tabcolsep}{5pt} 
+\renewcommand{\arraystretch}{0.8}
+
+%-----------------------
+% Set pdf information and add title, fill in the fields
+%-----------------------
+\hypersetup{ 	
+pdfsubject = {Galactic Archaeology Coursework},
+pdftitle = {Galactic Archaeology Coursework},
+pdfauthor = {Laura Just Fung (lj441)}
+}
+
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+%-----------------------
+% Begin document
+%-----------------------
+\begin{document} 
+
+\begin{center}
+    \LARGE{\textbf{Galactic Archaeology Coursework Assignment}}
+    \\
+    \Large{{An All-Sky Gaia Map to Probe the Milky Way's Halo}}
+    \\
+    \large{Laura Just Fung (lj441)}
+    \\
+    April 4, 2025
+    \\
+    Word count: 2196
+\end{center}
+
+\section{Introduction}
+Stellar streams are remnants of disrupted star clusters and dwarf galaxies that orbit the Milky Way. They are important for understanding the formation and evolution of the Milky Way, as well as the nature of dark matter. 
+
+The Field of Streams map, created using Sloan Digital Sky Survey (SDSS) data, revealed faint low-surface-brightness structures in the Milky Way's halo. However, the map is limited to high-latitude regions. In contrast, Gaia data provides a more complete view of the night sky, allowing for the opportunity to create an all-sky map of the low-surface-brightness structures in the Milky Way's halo. 
+
+This report focuses on the use of Gaia data to create a map of the Milky Way's halo, with a particular emphasis on the use of Red Giant Branch (RGB) stars as tracers of the halo as Main Sequence (MS) and Main Sequence Turn-Off (MSTO) stars are too faint to be seen by Gaia at the required distances. 
+
+Selecting a clean and efficient sample of RGB stars to probe the galactic halo from the Gaia database is non-trivial and is one of the aims of this report along with identifying and characterising the low-surface-brightness structures in the Milky Way's halo using Gaia data. 
+
+\section{Data}
+\label{sec:data}
+The data used in this report is from Gaia DR3 \citep{2016A&A...595A...1G, 2023Gaia}, accessed through \texttt{astroquery} \citep{2019AJ....157...98G}. The data was queried using several conservative cuts to limit the amount of data to be processed. The initial cuts made are shown in Table~\ref{tab:query_cuts}.
+
+The parallax cut was made to ensure that the stars were a reasonable distance away from the Earth, as the halo is expected to be at distances greater than 10 kpc. The BP-RP cut was made to ensure that the stars were at least somewhat red. As the data is reddened by dust and extinction, and would only be dereddened when the correction was performed, this cut was made to ensure that the stars were not too blue. The |b| cut was made such that the Galactic plane would be avoided as the stars there would be in such high numbers that they would dominate the brightness and contaminate the image. Additionally, as the purpose of this report is to search for halo substructures, it is unlikely that any halo stars would be found in the plane, dominated in brightness as it is by the galactic disc. The G cut was made to for practical reasons, as the Gaia data is limited to a magnitude of 20.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{c|c}
+    Cut & Value \\
+    \hline
+    Parallax & $< 0.1$ mas \\
+    BP-RP & $> 1$ mag \\
+    |b| & $> 10$ deg \\
+    G & $< 20$ mag \\
+    \hline
+    \end{tabular}
+    \caption{Initial cuts applied to the Gaia DR3 data when querying.}
+    \label{tab:query_cuts}
+\end{table}
+
+The data was then filtered to remove stars with a parallax error greater than 50\% as well as stars with a parallax less than zero. A parallax correction of $+0.052$ mas was made to the data with a parallax error less than 20\% following the method of \citet{10.1093/mnras/stz3479}.
+
+The data was corrected for solar reflex motion using \texttt{gala.coordinates. reflex\_correct} from \texttt{GALA} \citep{gala,adrian_price_whelan_2020_4159870}. It uses the Cartesian Galactocentric coordinate system to correct the data.
+
+The velocity and integral of motion data was obtained by first converting the data into the Galactocentric coordinate system using \texttt{Astropy} \citep{astropy:2013,astropy:2018,astropy:2022}. Following the method by \citeauthor{2023A&A...679A.109C}, which assigns a theoretical radial velocity to each star and then corrects to the local standard of rest LSR. This was then used to calculate the integrals of motion $L_z$, $L_\bot$, and $E$ using the method described by \citeauthor{10.1093/mnras/stz3479}, which used \texttt{GALA}'s \texttt{MWPotential2014} to model the gravitational potential of the Milky Way.
+
+The data was then cut to have a proper motion magnitude less than 5 mas/yr, in order to further remove stars too close to the Galactic plane. The plot that justifies this cut is shown in Figure~\ref{fig:pm_cut}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth, keepaspectratio]{../plots/pm_cut.png}
+    \caption{Left: Distance and proper motion magnitude histogram. Middle: Log10 of the distance and proper motion magnitude histogram. Right: Distance and proper motion magnitude histogram coloured by mean |b|. The red line shows the cut made at 3.5 mas/yr.}
+    \label{fig:pm_cut}
+\end{figure}
+
+Dereddening of the data was performed using the \texttt{extinction\_correction} function from the \texttt{dustmaps} package \citep{Green2018}. 
+
+Using the dereddened data, a Colour-Magnitude Diagram (CMD) was plotted in Fig.~\ref{fig:cmd} to aid in visualisation and selection of a clean sample of RGB stars.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth, keepaspectratio]{../plots/CMD.png}
+    \caption{Colour-Magnitude Diagram (CMD) of the dereddened data. The red line shows the cut made to select RGB stars.}
+    \label{fig:cmd}
+\end{figure}
+
+Additionally, the Hertzsprung-Russell Diagram was also plotted in Fig.~\ref{fig:hrd}. The selection in BP-RP is shown with a red line, of which the RGB stars are expected to be on the right-hand side.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth, keepaspectratio]{../plots/HRD.png}
+    \caption{Hertzsprung-Russell Diagram (HRD) of the dereddened data. The red line shows the cut made to select RGB stars.}
+    \label{fig:hrd}
+\end{figure}
+\clearpage
+\section{RGB selection}
+\label{sec:rgb_selection}
+The RGB stars were selected using the following criteria:
+\begin{itemize}
+    \item $G^0 < 18$ mag
+    \item $(BP-RP)^2 > 1$ mag
+    \item $\mu < 5$ mas/yr
+    \item $0 < \pi < 0.1$ mas
+    \item $d > 5$ kpc
+    \item |b| > 10 deg
+    \item M/H < -0.5 dex
+\end{itemize}
+
+The cut at $G^0 < 18$ mag was made to select stars that are not too faint. The cut at $(BP-RP)^0 > 1$ mag was made to ensure that the stars were red enough to be RGB stars. The cut at $\mu < 5$ mas/yr was made to ensure that the stars were not too close to the Galactic plane and part of the Galactic halo. The cut at $0 < \pi < 0.1$ mas was made to select for stars whose parallaxes can be used to calculate distances, yet not too close by. The cut at $d > 5$ kpc was made to ensure that the stars were in the halo and not in the disc. The cut at |b| > 10 deg was made to ensure that the stars were not too close to the Galactic plane.
+
+With regards to the completeness of the sample, there is no doubt that the requirement that the parallax $\pi > 0$ mas is a debilitating one, as it removes a large amount of far away RGB stars in the halo. That heavily impacts the completeness of the selection used in this report. Additionally, the distance and galactic latitude cuts, while they are necessary to remove disc stars, also potentially remove a large amount of RGB stars that happen to be within that range. 
+
+However, the requirement that $(BP-RP)^0 > 1$ mag helps create a purer selection of RGB stars, as it removes the stars that are too blue to be RGB stars. Additionally, the M/H cut further restricts the star sample to be older and thus more likely to be RGB.
+
+The credible distance range probed by this RGB selection is shown in Fig.~\ref{fig:distance_range}. This range is between 6 and 19 kpc, with the majority of stars being at a distance of around 6 to 7 kpc.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth, keepaspectratio]{../plots/distance_range.png}
+    \caption{Distance range probed by the RGB selection. The histogram shows the distance distribution of the stars in the sample.}
+    \label{fig:distance_range}
+\end{figure}
+
+Overplotting isochrones over the Hertzsprung-Russell Diagram of the final RGB sample shows that it was relatively well selected. The HRD follows the curve of the isochrones fairly well. However, it also indicates that the selection of the RGB sample was slightly overzealous as the RGB phase extends a bit further down in absolute G magnitude than suggested by the RGB sample.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth, keepaspectratio]{../plots/isochrones.png}
+    \caption{Isochrones overplotted HRD diagram of final RGB sample for log ages 10, 10.05, and 10.09 in purple, blue, and pink.}
+\end{figure}
+
+\clearpage
+\section{Map}
+\subsection{Field of streams}
+\label{sec:fieldstreams}
+To recreate the Field of Streams map using the Gaia data, the data was queried to only include stars in the region $100 \le \mathrm{RA} \le 260$ and $-10 < \mathrm{Dec} < 80$. As Gaia has a shallower depth of sensitivity, the parallax over error quality cut was skipped such that the later resulting maps would be in higher resolution.
+
+Using three magnitude bins evenly dividing the range $14.5 \le G^0 \le 19$ mag, a false-colour RGB image was created using the Gaia G, BP, and RP bands. Arranged in the order of red, green, and blue, the colours represent the dimmest to brightest magnitude bins. As the absolute G magnitude was used, this means that the colours also represent increasing distance from Earth. The resulting map is shown in Fig.~\ref{fig:fieldstreams}. 
+
+Proper motion magnitude was also used to create an alternate false-colour RGB image of the same region. As like the previous image, three proper motion magnitude bins evenly divide the range $0.4 \le \mu \le 3.5$ mas/yr, with the blue channel representing the smallest proper motion magnitude and the red channel the largest. As like before, the increasing proper motion magnitude also represents increasing distance. The resulting map is shown in Fig.~\ref{fig:fieldstreams_pm}.
+
+In both maps, the Sagittarius Stream is clearly visible, as well as the Monoceros Ring. There is also some hint of the Orphan Stream. However, the maps do not allow for the same resolution as the SDSS Field of Streams map as Gaia does not survey as deeply as the SDSS.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth, keepaspectratio]{../plots/RGB_mag_plot_fos.png}
+    \caption{Field of Streams map created using Gaia data. The colours represent the G band magnitude of the stars, with red representing the dimmest stars and blue representing the brightest stars.}
+    \label{fig:fieldstreams}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth, keepaspectratio]{../plots/RGB_pm_plot_fos.png}
+    \caption{Field of Streams map created using Gaia data. The colours represent the proper motion magnitude of the stars, with red representing the largest proper motion and blue representing the smallest.}
+    \label{fig:fieldstreams_pm}
+\end{figure}
+
+\subsection{All-sky map}
+\label{sec:allsky}
+The all-sky map in RGB false-colour was created using the same method as the Field of Streams maps. However, the parallax over error quality cut was applied. The resulting dereddened G magnitude map is shown in Fig.~\ref{fig:allsky} and the proper motion magnitude map is shown in Fig.~\ref{fig:allsky_pm}.
+
+The G-band magnitude all-sky map was created using the range $14 \le G^0 \le 19$ mag and the proper motion magnitude map was created using the range $0.5 \le \mu \le 3.5$ mas/yr.
+
+As seen in Figures~\cref{fig:allsky,fig:allsky_pm}, the Sagittarius stream is very prominently shown, along with several obvious point overdensities in the 2D RA-Dec histogram. The proper motion magnitude all-sky map also shows the 3D structure of the Sagittarius stream, where it is closest to Earth at around 200 RA and 0 Dec and then curves further away.
+
+Comparing the figures, it appears that the proper motion magnitude map is produces a much clearer image of the all-sky map than the G band magnitude map, and is also much better able to show the 3D structure of the Sagittarius stream. However, the other stellar streams identified in the SDSS Field of Streams map are unable to be visually identified from either all-sky map.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth, keepaspectratio]{../plots/RGB_mag_plot.png}
+    \caption{All-sky map created using Gaia data. The colours represent the G band magnitude of the stars, with red representing the dimmest stars and blue representing the brightest stars.}
+    \label{fig:allsky}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth, keepaspectratio]{../plots/RGB_pm_plot.png}
+    \caption{All-sky map created using Gaia data. The colours represent the proper motion magnitude of the stars, with red representing the largest proper motion and blue representing the smallest.}
+    \label{fig:allsky_pm}
+\end{figure}
+\clearpage
+\section{Identifying Satellites}
+\label{sec:identifying}
+\subsection{Difference of Gaussians}
+\label{sec:dog}
+In order to identify satellites in the data, a difference of gaussians (DoG) filter was applied to the data. The DoG filter is a convolutional filter that is used to identify features in images. It works by subtracting two Gaussian filters of different widths, which allows for the identification of overdensities of features at different scales. The result of using the DoG filter on the data is shown in Fig.~\ref{fig:dog}.
+
+As can be seen in the image, the DoG filter identified several overdensities in the data but was unable to detect the overdensities caused by extended objects. This is due to the fact that the parameters of the DoG filter was set such that it would only detect overdensities of point-like objects.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\columnwidth, keepaspectratio]{../plots/dog_satellites.png}
+    \caption{Plot of the difference of gaussians (DoG) filter applied to the data. The red points overplotted on the 2D RA-Dec histogram show the DoG flagged overdensities as candidate satellites.}
+    \label{fig:dog}
+\end{figure}
+\clearpage
+\subsection{DBSCAN}
+\label{sec:dbscan}
+In addition to the DoG filter, a DBSCAN clustering algorithm was also applied to the data. It is a density-based clustering algorithm that is used to identify clusters in the data that are close together in feature space. The DBSCAN algorithm from \texttt{scikit\-learn} \citep{scikit-learn} was applied to the data with the parameters shown in Table~\ref{tab:dbscan_params}. The resulting clusters are shown in Fig.~\ref{fig:dbscan}.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{c|c}
+    Parameter & Value \\
+    \hline
+    eps & 0.03 \\
+    min samples & 2 \\
+    \end{tabular}
+    \caption{DBSCAN parameters used to identify clusters in the data.}
+    \label{tab:dbscan_params}
+\end{table}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\columnwidth, keepaspectratio]{../plots/dbscan_satellites.png}
+    \caption{DBSCAN clustering algorithm applied to the data. Top: the coloured points overplotted on the 2D RA-Dec histogram show the DBSCAN flagged overdensities as candidate satellites. Each different colour denotes a separate cluster. Bottom: the coloured points overplotted on the 2D $\mu_{\mathrm{RA}}$-$\mu_{\mathrm{Dec}}$ histogram show the DBSCAN flagged overdensities as candidate satellites. Each different colour denotes a separate cluster.}
+    \label{fig:dbscan}
+\end{figure}
+
+The DBSCAN algorithm was able to identify several more clusters in the data than the DoG filter, most notably the clusters denoting the Large and Small Magellanic Clouds (LMC and SMC) as well as the Sagittarius dwarf galaxy. However, the DBSCAN algorithm also tends to identify more false positives than the DoG filter, most obviously in the regions around the Galactic plane.
+
+Combining the two methods, the DoG filter and the DBSCAN algorithm, several overdensities were identified as candidate satellites. The combined results are shown in Fig.~\ref{fig:combined_dog_db}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth, keepaspectratio]{../plots/combined_dog_db.png}
+    \caption{Combined results of the DoG filter and DBSCAN algorithm. The red points overplotted on the 2D RA and Dec histogram show DoG flagged candidates whilst the blue points overplotted show the DBSCAN flagged candidates.}
+    \label{fig:combined_dog_db}
+\end{figure}
+
+\subsection{Cross-matching}
+\label{sec:crossmatch}
+The combined candidate clusters identified were then cross-matched with the \citeauthor{2020ApJ...893...47D} catalog for known Milky Way satellites \citep{2020ApJ...893...47D}. This was performed using \texttt{astroquery} \citep{2019AJ....157...98G}, accessing the Vizier catalog \texttt{J/ApJ/893/47/table2}. The cross-matching was performed using a 1 arcminute radius. The identified satellite galaxies are shown in Fig.~\ref{fig:satellite_crossmatch} and detailed in Table~\ref{tab:drlica_wagner}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\columnwidth, keepaspectratio]{../plots/satellite_cross_match.png}
+    \caption{Cross-matched candidates with the \citeauthor{2020ApJ...893...47D} catalog. The red points overplotted on the 2D RA and Dec histogram show the cross-matched candidates.}
+    \label{fig:satellite_crossmatch}
+\end{figure}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{c|c|c}
+        & RAJ2000 (deg) & DEJ2000 (deg) \\
+        \hline
+        Sagittarius & 283.831 & -30.545        
+    \end{tabular}
+    \caption{Satellite galaxies identified by cross-matching the DoG and DBSCAN flagged candidates with the \citeauthor{2020ApJ...893...47D} catalog.} 
+    \label{tab:drlica_wagner}
+\end{table}
+\clearpage
+\section{Stellar streams}
+\label{sec:streams}
+\subsection{DBSCAN in velocity and integral-of-motion space}
+To identify stellar streams, the conventional method is to find clusters in velocity space and integral-of-motion space, as seen in Ref~\citep[e.g.][]{10.1093/mnras/stz3479, Koppelman_2018}. To this end, the DBSCAN algorithm from \texttt{scikit-learn} \citep{scikit-learn} was used to identify clusters in the velocity-space, taking $v_r$, $v_\phi$, and $v_z$ as features. The parameters used for this DBSCAN are shown in Table~\ref{tab:dbscan_params2}. The resulting clusters are shown in Fig.~\ref{fig:dbscan2}.
+
+As seen in Fig.~\ref{fig:dbscan2}, the DBSCAN algorithm applied on the ($v_r$, $v_\phi$, $v_z$) features was not very capable at identifying stellar streams in the data. The Sagittarius stream is highlighted in green, but the other streams are not identified. There is also a significant amount of false positives flagged by the algorithm, which is to be expected, given that the $\mathrm{eps}$ parameter had to be set quite large in order for the DBSCAN algorithm to identify the streams.
+
+The DBSCAN algorithm was also applied to the ($L_z$, $L_\bot$, $E$) features, following \citeauthor{10.1093/mnras/stz3479}, but it was unable to identify any stellar streams and only a few clusters in the data. Any flagged candidates obtained from this method were not used in the later analysis as they overlap with the candidates flagged by the DoG filter and DBSCAN algorithm.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{c|c}
+    Parameter & Value \\
+    \hline
+    eps & 0.1 \\
+    min\_samples & 2 \\
+    \end{tabular}
+    \caption{DBSCAN parameters used to identify clusters in the ($v_r$, $v_\phi$, $v_z$) feature space of the data.}
+    \label{tab:dbscan_params2}
+\end{table}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth, keepaspectratio]{../plots/dbscan_velocity.png}
+    \caption{Results of the DBSCAN algorithm on ($v_r$, $v_\phi$, $v_z$) features. Differing colours flag separate clusters. Top: The coloured points overplotted on the 2D RA-Dec histogram show the flagged candidates. Bottom: The coloured points overplotted on the 2D $v_r-v_z$ histogram show the flagged candidates.}
+    \label{fig:dbscan2}
+\end{figure}
+
+\subsection{Visual inspection}
+Another method of identifying stellar streams is by visual inspection. The most obvious stellar stream is the Sagittarius stream, which is shown prominently in Figures~\cref{fig:fieldstreams,fig:fieldstreams_pm,fig:allsky,fig:allsky_pm}.
+
+The Orphan Stream as well as the Monoceros Ring are also somewhat visible in the zoomed-in Field of Streams recreation in Section~\ref{sec:fieldstreams}. However, they are not as prominent as the Sagittarius stream in the all-sky map and are easily lost amongst the rest of the data.
+
+\section{Literature comparison}
+\subsection{APOGEE DR17}
+\label{sec:apogee}
+The flagged overdensities found in Section~\ref{sec:identifying} were cross-matched with APOGEE DR17 catalog using \texttt{astroquery}. A search radius of 5 arcsec was used, with the results of the cross-matching shown in Fig.~\ref{fig:apogee_match}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth, keepaspectratio]{../plots/apogee_cross_match.png}
+    \caption{Results of the cross-matched DoG and DBSCAN flagged candidates (red) with the APOGEE DR17 catalog (black circles), overplotted on the 2D histogram of RA and Dec.}
+    \label{fig:apogee_match}
+
+\end{figure}
+
+\subsection{Harris 2010 catalog}
+\label{sec:harris}
+The flagged clusters found in Section~\ref{sec:identifying} were also cross-matched with the \citeauthor{harris2010newcatalogglobularclusters} catalog using \texttt{astroquery}. A search radius of 2 arcmin was used, with the results of the cross-matching shown in Fig.~\ref{fig:harris_match}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth, keepaspectratio]{../plots/harris_cross_match.png}
+    \caption{Results of the cross-matched DoG and DBSCAN flagged candidates (red) with the \citeauthor{harris2010newcatalogglobularclusters} catalog (black circles), overplotted on the 2D histogram of RA and Dec.}
+    \label{fig:harris_match}
+\end{figure}
+
+The \citeauthor{harris2010newcatalogglobularclusters} catalog comprises of known Milky Way globular clusters. The cross-matching finds 35 identified globular clusters in the data, including NGC 1851, M3, and the Sagittarius Dwarf Galaxy. However, instead of NGC 5053, the cross-matching finds NGC 5024 instead. This is likely due to the fact that NGC 5024 and NGC 5053 are very close together in the apparent night sky as well as similar distances from the Earth. Thus, the DoG and DBSCAN algorithms find it very difficult to distinguish between the two clusters and flags them as the same cluster. The resulting cluster is then classified as NGC 5024 instead of NGC 5053 due to the fact that there are more stars originating from NGC 5024 rather than NGC 5053 present in the data.
+
+\subsection{Identified clusters}
+
+There are 107 total clusters identified in the data that were positively cross-matched with either or both the APOGEE DR17 and the \citeauthor{harris2010newcatalogglobularclusters} catalogs. There was one duplicate cluster identified by both the APOGEE DR17 and \citeauthor{harris2010newcatalogglobularclusters} catalogs, which was NGC 1904.
+
+\subsection{Metallicities}
+\label{sec:metallicities}
+The Gaia-obtained metallicities of the identified clusters can be compared with the APOGEE DR17 and \citeauthor{harris2010newcatalogglobularclusters} catalogs.
+
+The \citeauthor{harris2010newcatalogglobularclusters} identified clusters have metallicities ranging from $-2.5 < [Fe/H] < 0$ dex, with the majority of the clusters having metallicities around $-1.5$ dex. This is consistent with expectations. The APOGEE DR17 identified clusters have metallicities ranging from $-2.5 < [Fe/H] < 0 $ dex, with the majority of the candidates having metallicities around $-1.0$ dex and $-1.5$ dex, as expected for halo stars.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth, keepaspectratio]{../plots/metallicity_histogram.png}
+    \caption{Metallicity distribution of the identified clusters. Top: the histogram of the Gaia metallicity distribution. Middle: the histogram of the Harris metallicity distribution. Bottom: the histogram of APOGEE DR17 metallicity distribution.}
+    \label{fig:metallicity}
+\end{figure}
+
+\section{Summary}
+Starting with the Gaia DR3 data, a clean, yet small, sample of RGB stars was selected using several conservative cuts. During this process, the sample was dereddened and corrected for solar reflex motion. A less pure sample of RGB stars was used to create the all-sky map of the Milky Way's halo as well as a recreation of the Field of Streams image. Satellite galaxies, globular clusters, and stellar streams were attempted to be identified using a range of techniques including a difference of gaussians filter, a DBSCAN clustering algorithm, and visual inspection. The flagged candidates for satellites and globular clusters were cross-matched with existing databases, including the \citeauthor{2020ApJ...893...47D}, APOGEE DR17, and \citeauthor{harris2010newcatalogglobularclusters} catalog. The results of this cross-matching showed that the flagged candidates were indeed satellite galaxies and globular clusters. Additionally, the metallicity distribution of the identified candidates was shown to be consistent with expectations for halo stars.
+\clearpage
+\bibliographystyle{vancouver-authoryear}
+\bibliography{bibliography}
+\appendix
+\section{Use of auto-generation tools}
+Auto-generation tools were used to help parse error messages throughout the project, and to help format this \LaTeX\ report.
+
+Auto-generation tools were not used elsewhere, for code generation, writing, or otherwise.
+\end{document}
