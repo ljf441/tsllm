@@ -1,15 +1,30 @@
-# M2 Coursework: LoRA Fine-Tuning for Time Series Forecasting
+# tsllm
+Training a Qwen2 0.5 B LLM to be able to predict Lotka-Volterra time series data.
 
-Please open the file `main.pdf` for the coursework instructions. Good luck and have fun!
+# within
+This repository contains:
+1. Jupyter Notebooks:
+    - `preprocessor.ipynb` covering task 2a of the coursework.
+    - `evaluation.ipynb` covering task 2b of the coursework.
+    - `flops_calculator.ipynb` covering task 1 and 2c of the coursework.
+    - `lora_default.ipynb` covering task 3a of the coursework.
+    - `gridsearch.ipynb` covering task 3b of the coursework.
+    - `lora_final.ipynb` covering task 3c of the coursework.
+    - ...
+2. `.py` files:
+    - `lora_default.ipynb` covering task 3a of the coursework.
+    - `gridsearch.py` covering task 3b of the coursework.
+    - `lora_run.py` covering task 3c of the coursework.
+    - ...
 
-## Clarifications
+# where to find the report
+The report is located in the `report` folder and is named `report.pdf`.
 
-**Q: Are the differential equations used to generate the Lotka-Volterra data the standard equations or modified versions? Are the original parameters available and should they be used as model inputs?**
+# use of auto-generation tools
 
-A:
+Auto-generation tools were used as follows:
+- To help setup `Tensorflow` on a WSL2 environment to be able to use the GPU.
+- Parsing error messages throughout the project.
+- Assistance in formatting the report in $\LaTeX$, specifically with tables and referencing.
 
-The specific differential equations used to generate the data are not relevant. You should treat the dataset as observations you have been given and are now trying to model with a time series forecast approach.
-
-The idea is that the LLM will pick up on the patterns from its input and be able to infer any relevant parameters in the underlying dynamics, similar to the approach in the LLMTIME paper.
-
-This is similar to how LLMs work in practice. They predict the next token based on the previous sequence of tokens. They don't need structured inputs describing if the user is happy or sad. They just infer it all from the context.
+Auto-generation tools were not used elsewhere, for code generation, writing, or otherwise.
