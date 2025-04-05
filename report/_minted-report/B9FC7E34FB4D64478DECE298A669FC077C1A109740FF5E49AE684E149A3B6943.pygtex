@@ -131,7 +131,14 @@
 
 \PYG{k}{def} \PYG{n+nf}{load\PYGZus{}and\PYGZus{}preprocess}\PYG{p}{(}\PYG{n}{file\PYGZus{}path}\PYG{p}{,} \PYG{n}{test\PYGZus{}size}\PYG{o}{=}\PYG{l+m+mf}{0.2}\PYG{p}{,} \PYG{n}{alpha}\PYG{o}{=}\PYG{l+m+mi}{5}\PYG{p}{,} \PYG{n}{decimals}\PYG{o}{=}\PYG{l+m+mi}{3}\PYG{p}{):}
 \PYG{+w}{    }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
-\PYG{l+s+sd}{    Load and preprocess the dataset from an HDF5 file.}
+\PYG{l+s+sd}{    Load and preprocess the dataset from an HDF5 file, applying scaling and encoding.}
+\PYG{l+s+sd}{    Args:}
+\PYG{l+s+sd}{        file\PYGZus{}path (str): Path to the HDF5 file.}
+\PYG{l+s+sd}{        test\PYGZus{}size (float): Proportion of the dataset to include in the test split.}
+\PYG{l+s+sd}{        alpha (float): Scaling factor.}
+\PYG{l+s+sd}{        decimals (int): Number of decimal places for scaling.}
+\PYG{l+s+sd}{    Returns:}
+\PYG{l+s+sd}{        data (list): List containing train, validation, and test datasets.}
 \PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
     \PYG{k}{with} \PYG{n}{h5py}\PYG{o}{.}\PYG{n}{File}\PYG{p}{(}\PYG{n}{file\PYGZus{}path}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}r\PYGZdq{}}\PYG{p}{)} \PYG{k}{as} \PYG{n}{f}\PYG{p}{:}
         \PYG{n}{trajectories} \PYG{o}{=} \PYG{n}{f}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}trajectories\PYGZdq{}}\PYG{p}{][:]}
@@ -158,7 +165,7 @@
 
 \PYG{k}{def} \PYG{n+nf}{load\PYGZus{}and\PYGZus{}process\PYGZus{}example}\PYG{p}{(}\PYG{n}{file\PYGZus{}path}\PYG{p}{,} \PYG{n}{tokenizer}\PYG{p}{,} \PYG{n}{points}\PYG{o}{=}\PYG{l+m+mi}{100}\PYG{p}{,} \PYG{n}{test\PYGZus{}size}\PYG{o}{=}\PYG{l+m+mf}{0.2}\PYG{p}{,} \PYG{n}{alpha}\PYG{o}{=}\PYG{l+m+mi}{5}\PYG{p}{,} \PYG{n}{decimals}\PYG{o}{=}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{n}{seed}\PYG{o}{=}\PYG{l+m+mi}{441}\PYG{p}{):}
 \PYG{+w}{    }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
-\PYG{l+s+sd}{    Load and preprocess a specific example from the dataset.}
+\PYG{l+s+sd}{    Load and preprocess a specific example from the dataset, applying scaling and encoding.}
 
 \PYG{l+s+sd}{    Args:}
 \PYG{l+s+sd}{        file\PYGZus{}path (str): Path to the HDF5 file.}
@@ -206,31 +213,21 @@
     \PYG{k}{return} \PYG{n}{tokenized\PYGZus{}data}\PYG{p}{,} \PYG{n}{given\PYGZus{}text}\PYG{p}{,} \PYG{n}{np}\PYG{o}{.}\PYG{n}{column\PYGZus{}stack}\PYG{p}{((}\PYG{n}{prey}\PYG{p}{,} \PYG{n}{predator}\PYG{p}{,} \PYG{n}{new\PYGZus{}prey}\PYG{p}{,} \PYG{n}{new\PYGZus{}predator}\PYG{p}{)),} \PYG{n}{time}
 
 \PYG{k}{def} \PYG{n+nf}{process\PYGZus{}data}\PYG{p}{(}\PYG{n}{texts}\PYG{p}{,} \PYG{n}{tokenizer}\PYG{p}{,} \PYG{n}{points}\PYG{o}{=}\PYG{l+m+mi}{80}\PYG{p}{):}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{    Process the input texts by tokenizing and padding them.}
+
+\PYG{l+s+sd}{    Args:}
+\PYG{l+s+sd}{        texts (list): List of input texts.}
+\PYG{l+s+sd}{        tokenizer (transformers.PreTrainedTokenizer): The tokenizer to use.}
+\PYG{l+s+sd}{        points (int): The number of points to load.}
+\PYG{l+s+sd}{    Returns:}
+\PYG{l+s+sd}{        texts (np.ndarray): The processed texts.}
+\PYG{l+s+sd}{        given\PYGZus{}input\PYGZus{}ids (torch.Tensor): The tokenized and padded input IDs.}
+\PYG{l+s+sd}{    \PYGZdq{}\PYGZdq{}\PYGZdq{}}
     \PYG{n}{given\PYGZus{}input\PYGZus{}ids} \PYG{o}{=} \PYG{p}{[]}
     \PYG{k}{for} \PYG{n}{text} \PYG{o+ow}{in} \PYG{n}{texts}\PYG{p}{:}
         \PYG{n}{given\PYGZus{}text} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{};\PYGZsq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{([}\PYG{n}{chunk} \PYG{k}{for} \PYG{n}{i}\PYG{p}{,} \PYG{n}{chunk} \PYG{o+ow}{in} \PYG{n+nb}{enumerate}\PYG{p}{(}\PYG{n}{text}\PYG{o}{.}\PYG{n}{split}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{};\PYGZsq{}}\PYG{p}{))} \PYG{k}{if} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{points}\PYG{p}{])}
         \PYG{n}{encoding\PYGZus{}given} \PYG{o}{=} \PYG{n}{tokenizer}\PYG{p}{(}\PYG{n}{given\PYGZus{}text}\PYG{p}{,} \PYG{n}{return\PYGZus{}tensors}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}pt\PYGZdq{}}\PYG{p}{,} \PYG{n}{padding}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}max\PYGZus{}length\PYGZsq{}}\PYG{p}{,} \PYG{n}{padding\PYGZus{}side}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}left\PYGZsq{}}\PYG{p}{,} \PYG{n}{max\PYGZus{}length}\PYG{o}{=}\PYG{l+m+mi}{1200}\PYG{p}{)}
         \PYG{n}{given\PYGZus{}input\PYGZus{}ids}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{encoding\PYGZus{}given}\PYG{o}{.}\PYG{n}{input\PYGZus{}ids}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])}
     \PYG{k}{return} \PYG{n}{np}\PYG{o}{.}\PYG{n}{stack}\PYG{p}{([}\PYG{n}{text} \PYG{k}{for} \PYG{n}{text} \PYG{o+ow}{in} \PYG{n}{texts}\PYG{p}{]),} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{stack}\PYG{p}{(}\PYG{n}{given\PYGZus{}input\PYGZus{}ids}\PYG{p}{)}
-
-
-\PYG{k}{def} \PYG{n+nf}{generate\PYGZus{}data}\PYG{p}{(}\PYG{n}{model}\PYG{p}{,} \PYG{n}{tokenizer}\PYG{p}{,} \PYG{n}{system\PYGZus{}id}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{output\PYGZus{}points}\PYG{o}{=}\PYG{l+m+mi}{100}\PYG{p}{,} \PYG{n}{alpha}\PYG{o}{=}\PYG{l+m+mi}{5}\PYG{p}{,} \PYG{n}{decimals}\PYG{o}{=}\PYG{l+m+mi}{3}\PYG{p}{):}
-
-    \PYG{n}{full\PYGZus{}tokenized\PYGZus{}data}\PYG{p}{,} \PYG{n}{\PYGZus{}}\PYG{p}{,} \PYG{n}{full\PYGZus{}combined\PYGZus{}data}\PYG{p}{,} \PYG{n}{full\PYGZus{}times} \PYG{o}{=} \PYG{n}{get\PYGZus{}and\PYGZus{}process\PYGZus{}data}\PYG{p}{(}\PYG{n}{tokenizer}\PYG{p}{,} \PYG{n}{system\PYGZus{}id}\PYG{o}{=}\PYG{n}{system\PYGZus{}id}\PYG{p}{,} \PYG{n}{points}\PYG{o}{=}\PYG{l+m+mi}{100}\PYG{p}{,} \PYG{n}{alpha}\PYG{o}{=}\PYG{n}{alpha}\PYG{p}{,} \PYG{n}{decimals}\PYG{o}{=}\PYG{n}{decimals}\PYG{p}{)}
-    
-    \PYG{n}{max\PYGZus{}token\PYGZus{}length} \PYG{o}{=} \PYG{n+nb}{max}\PYG{p}{(}\PYG{n}{full\PYGZus{}tokenized\PYGZus{}data}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}input\PYGZus{}ids\PYGZdq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1200}\PYG{p}{)} \PYG{c+c1}{\PYGZsh{}1180}
-    
-    \PYG{n}{actual\PYGZus{}prey}\PYG{p}{,} \PYG{n}{actual\PYGZus{}predator} \PYG{o}{=} \PYG{n}{full\PYGZus{}combined\PYGZus{}data}\PYG{p}{[:,}\PYG{l+m+mi}{2}\PYG{p}{],} \PYG{n}{full\PYGZus{}combined\PYGZus{}data}\PYG{p}{[:,}\PYG{l+m+mi}{3}\PYG{p}{]}
-
-    \PYG{n}{tokenized\PYGZus{}data} \PYG{o}{=} \PYG{n}{get\PYGZus{}and\PYGZus{}process\PYGZus{}data}\PYG{p}{(}\PYG{n}{tokenizer}\PYG{p}{,} \PYG{n}{system\PYGZus{}id}\PYG{o}{=}\PYG{n}{system\PYGZus{}id}\PYG{p}{,} \PYG{n}{points}\PYG{o}{=}\PYG{n}{output\PYGZus{}points}\PYG{p}{)[}\PYG{l+m+mi}{0}\PYG{p}{]}
-
-    \PYG{n}{model}\PYG{o}{.}\PYG{n}{eval}\PYG{p}{()}
-    
-    \PYG{k}{with} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{no\PYGZus{}grad}\PYG{p}{():}
-        \PYG{n}{output} \PYG{o}{=} \PYG{n}{model}\PYG{o}{.}\PYG{n}{generate}\PYG{p}{(}\PYG{n}{tokenized\PYGZus{}data}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}input\PYGZus{}ids\PYGZdq{}}\PYG{p}{],} \PYG{n}{attention\PYGZus{}mask} \PYG{o}{=} \PYG{n}{tokenized\PYGZus{}data}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}attention\PYGZus{}mask\PYGZdq{}}\PYG{p}{],} \PYG{n}{max\PYGZus{}new\PYGZus{}tokens} \PYG{o}{=} \PYG{n}{max\PYGZus{}token\PYGZus{}length}\PYG{p}{)}
-    
-    \PYG{n}{prediction} \PYG{o}{=} \PYG{n}{tokenizer}\PYG{o}{.}\PYG{n}{decode}\PYG{p}{(}\PYG{n}{output}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])}
-    \PYG{n}{pred\PYGZus{}prey}\PYG{p}{,} \PYG{n}{pred\PYGZus{}predator} \PYG{o}{=} \PYG{n}{decoding}\PYG{p}{(}\PYG{n}{prediction}\PYG{p}{)}
-    
-    \PYG{k}{return} \PYG{n}{pred\PYGZus{}prey}\PYG{p}{,} \PYG{n}{pred\PYGZus{}predator}\PYG{p}{,} \PYG{n}{actual\PYGZus{}prey}\PYG{p}{,} \PYG{n}{actual\PYGZus{}predator}\PYG{p}{,} \PYG{n}{full\PYGZus{}times}
 \end{Verbatim}

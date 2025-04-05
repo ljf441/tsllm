@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2024.11.15)  5 APR 2025 13:16
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2024.11.15)  5 APR 2025 18:49
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -1085,11 +1085,7 @@ File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 ) [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}]
-
-LaTeX Warning: Reference `eq:scale' on page 2 undefined on input line 115.
-
-(./_minted-report/default.pygstyle) (./_minted-report/0F6E5D0D79D2F79B2D8743A47B615AE07C1A109740FF5E49AE684E149A3B6943.pygtex
-LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 1.
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 111.
  (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
 )
@@ -1097,6 +1093,7 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `cmtt' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
+ [2{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}] (./_minted-report/default.pygstyle) (./_minted-report/B9FC7E34FB4D64478DECE298A669FC077C1A109740FF5E49AE684E149A3B6943.pygtex
 LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <10.95> not available
 (Font)              Font shape `T1/cmtt/m/n' tried instead on input line 65.
 LaTeX Font Info:    Trying to load font information for TS1+cmtt on input line 83.
@@ -1108,36 +1105,48 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 )
-Package hyperref Info: bookmark level for unknown listing defaults to 0 on input line 141.
+Package hyperref Info: bookmark level for unknown listing defaults to 0 on input line 144.
 
+Overfull \hbox (7.1573pt too wide) in paragraph at lines 169--177
+ [][] 
+ []
 
-LaTeX Warning: `h' float specifier changed to `ht'.
+[3{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}] [4]
+<../plots/predictions_example.png, id=79, 622.4856pt x 368.8179pt>
+File: ../plots/predictions_example.png Graphic file (type png)
+<use ../plots/predictions_example.png>
+Package pdftex.def Info: ../plots/predictions_example.png  used on input line 187.
+(pdftex.def)             Requested size: 398.4237pt x 236.06516pt.
+<../plots/running_mse_example.png, id=81, 622.4856pt x 368.8179pt>
+File: ../plots/running_mse_example.png Graphic file (type png)
+<use ../plots/running_mse_example.png>
+Package pdftex.def Info: ../plots/running_mse_example.png  used on input line 208.
+(pdftex.def)             Requested size: 398.4237pt x 236.06516pt.
+ [5
 
-[2{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}] (./report.bbl) [3{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}] [4] (./report.aux)
+ <../plots/predictions_example.png>] [6 <../plots/running_mse_example.png>] (./report.bbl) [7
+
+] (./report.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
-
-
-LaTeX Warning: There were undefined references.
-
 Package rerunfilecheck Info: File `report.out' has not changed.
-(rerunfilecheck)             Checksum: 2D914FFB163BCF191A3C59174F03BEEF;545.
+(rerunfilecheck)             Checksum: 10803E724F345BE549AC4A37769EC82B;628.
  ) 
 Here is how much of TeX's memory you used:
- 19680 strings out of 474222
- 335943 string characters out of 5748732
- 1937975 words of memory out of 5000000
- 41478 multiletter control sequences out of 15000+600000
- 601511 words of font info for 170 fonts, out of 8000000 for 9000
+ 19716 strings out of 474222
+ 336752 string characters out of 5748732
+ 1935975 words of memory out of 5000000
+ 41503 multiletter control sequences out of 15000+600000
+ 598974 words of font info for 172 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 89i,21n,95p,1081b,622s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 89i,16n,95p,1092b,621s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfit1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1095.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/symbol/usyr.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on report.pdf (4 pages, 142321 bytes).
+Output written on report.pdf (7 pages, 488719 bytes).
 PDF statistics:
- 122 PDF objects out of 1000 (max. 8388607)
- 94 compressed objects within 1 object stream
- 18 named destinations out of 1000 (max. 500000)
- 46113 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 162 PDF objects out of 1000 (max. 8388607)
+ 126 compressed objects within 2 object streams
+ 26 named destinations out of 1000 (max. 500000)
+ 42035 words of extra memory for PDF output out of 42996 (max. 10000000)
 

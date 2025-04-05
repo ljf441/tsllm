@@ -130,7 +130,14 @@ def get_and_process_data(file_path, tokenizer, system_id=0, points=100, alpha=5,
 
 def load_and_preprocess(file_path, test_size=0.2, alpha=5, decimals=3):
     """
-    Load and preprocess the dataset from an HDF5 file.
+    Load and preprocess the dataset from an HDF5 file, applying scaling and encoding.
+    Args:
+        file_path (str): Path to the HDF5 file.
+        test_size (float): Proportion of the dataset to include in the test split.
+        alpha (float): Scaling factor.
+        decimals (int): Number of decimal places for scaling.
+    Returns:
+        data (list): List containing train, validation, and test datasets.
     """
     with h5py.File(file_path, "r") as f:
         trajectories = f["trajectories"][:]
@@ -157,7 +164,7 @@ def load_and_preprocess(file_path, test_size=0.2, alpha=5, decimals=3):
 
 def load_and_process_example(file_path, tokenizer, points=100, test_size=0.2, alpha=5, decimals=3, seed=441):
     """
-    Load and preprocess a specific example from the dataset.
+    Load and preprocess a specific example from the dataset, applying scaling and encoding.
 
     Args:
         file_path (str): Path to the HDF5 file.
@@ -205,30 +212,20 @@ def load_and_process_example(file_path, tokenizer, points=100, test_size=0.2, al
     return tokenized_data, given_text, np.column_stack((prey, predator, new_prey, new_predator)), time
 
 def process_data(texts, tokenizer, points=80):
+    """
+    Process the input texts by tokenizing and padding them.
+
+    Args:
+        texts (list): List of input texts.
+        tokenizer (transformers.PreTrainedTokenizer): The tokenizer to use.
+        points (int): The number of points to load.
+    Returns:
+        texts (np.ndarray): The processed texts.
+        given_input_ids (torch.Tensor): The tokenized and padded input IDs.
+    """
     given_input_ids = []
     for text in texts:
         given_text = ';'.join([chunk for i, chunk in enumerate(text.split(';')) if i < points])
         encoding_given = tokenizer(given_text, return_tensors="pt", padding='max_length', padding_side='left', max_length=1200)
         given_input_ids.append(encoding_given.input_ids[0])
     return np.stack([text for text in texts]), torch.stack(given_input_ids)
-
-
-def generate_data(model, tokenizer, system_id=0, output_points=100, alpha=5, decimals=3):
-
-    full_tokenized_data, _, full_combined_data, full_times = get_and_process_data(tokenizer, system_id=system_id, points=100, alpha=alpha, decimals=decimals)
-    
-    max_token_length = max(full_tokenized_data["input_ids"].shape[1] + 1, 1200) #1180
-    
-    actual_prey, actual_predator = full_combined_data[:,2], full_combined_data[:,3]
-
-    tokenized_data = get_and_process_data(tokenizer, system_id=system_id, points=output_points)[0]
-
-    model.eval()
-    
-    with torch.no_grad():
-        output = model.generate(tokenized_data["input_ids"], attention_mask = tokenized_data["attention_mask"], max_new_tokens = max_token_length)
-    
-    prediction = tokenizer.decode(output[0])
-    pred_prey, pred_predator = decoding(prediction)
-    
-    return pred_prey, pred_predator, actual_prey, actual_predator, full_times
