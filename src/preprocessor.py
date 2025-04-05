@@ -5,10 +5,22 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 import joblib
 import argparse
 from sklearn.model_selection import train_test_split
+from qwen import load_qwen
 
-def get_dataset(system_id=0, points=1000):
+def get_dataset(file_path, system_id=0, points=100):
+    """
+    Load the Lotka-Volterra dataset from an HDF5 file and extract the prey and predator data.
 
-    with h5py.File("lotka_volterra_data.h5", "r") as f:
+    Args:
+        file_path (str): Path to the HDF5 file.
+        system_id (int): The ID of the system to load.
+        points (int): The number of points to load.
+    Returns:
+        prey (np.ndarray): The prey values.
+        predator (np.ndarray): The predator values.
+        times (np.ndarray): The time points.
+    """
+    with h5py.File(file_path, "r") as f:
         trajectories = f["trajectories"][:]
         time_points = f["time"][:]
         prey = trajectories[system_id, :points, 0]
@@ -17,37 +29,70 @@ def get_dataset(system_id=0, points=1000):
 
     return prey, predator, times
 
-def load_qwen():
-    model_name = "Qwen/Qwen2.5-0.5B-Instruct"
-    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
-    model = AutoModelForCausalLM.from_pretrained(model_name, trust_remote_code=True)
-
-    # Freeze all parameters except LM head bias
-    for param in model.parameters():
-        param.requires_grad = False
-
-    # Add trainable bias to logits
-    assert model.lm_head.bias is None
-    model.lm_head.bias = torch.nn.Parameter(
-        torch.zeros(model.config.vocab_size, device=model.device)
-    )
-    model.lm_head.bias.requires_grad = True
-
-    return model, tokenizer
-
 def scaler(prey, predator, alpha, decimals=3):
+    """
+    Scales and rounds the prey and predator data.
+
+    Args:
+        prey (np.ndarray): The prey values.
+        predator (np.ndarray): The predator values.
+        alpha (float): Scaling factor.
+        decimals (int): Number of decimal places for rounding.
+    Returns:
+        rounded (np.ndarray): The scaled prey and predator values.
+    """
     prey = np.array(prey)
     predator = np.array(predator)
     data = np.stack([prey, predator], axis=-1)
     rescaled = data/alpha * 10
-    return np.round(rescaled, decimals = decimals)
-
+    rounded = np.round(rescaled, decimals=decimals)
+    return rounded
 def encoding(prey, predator):
+    """
+    Encode the prey and predator data into a string format. 
+
+    Args:
+        prey (np.ndarray): The prey values.
+        predator (np.ndarray): The predator values.
+    Returns:
+        encoded (str): The encoded data string.
+    """
     series = np.column_stack((prey, predator))
     encoded = ';'.join([','.join(map(str, row)) for row in series])
     return encoded
 
+def scale_and_encode(prey, predator, alpha, decimals):
+    """
+    Scale and encode the prey and predator data.
+
+    Args:
+        prey (np.ndarray): The prey values.
+        predator (np.ndarray): The predator values.
+        alpha (float): Scaling factor.
+        decimals (int): Number of decimal places for scaling.
+    Returns:
+        encoded (str): The encoded data string.
+    """
+    prey = np.array(prey)
+    predator = np.array(predator)
+    data = np.stack([prey, predator], axis=-1)
+    rescaled = data/alpha * 10
+    rescaled = np.round(rescaled, decimals=decimals)
+    series = np.column_stack((rescaled[:, 0], rescaled[:, 1]))
+    encoded = ';'.join([','.join(map(str, row)) for row in series])
+    return encoded
+
 def decoding(data):
+    """
+    Decode the encoded data back to prey and predator values.
+    
+    Args:
+        data (str): The encoded data string.
+        
+    Returns:
+        prey (np.ndarray): The decoded prey values.
+        predator (np.ndarray): The decoded predator values.
+    """
     time_steps = data.split(';')
     decoded = np.array([list(map(float, step.split(','))) 
                         for step in time_steps 
@@ -59,10 +104,24 @@ def decoding(data):
     predator = decoded[:, 1]
     return prey, predator
 
-model, tokenizer = load_qwen()
-
-def get_and_process_data(system_id=0, points=100, alpha=5, decimals=3):
-    prey, predator, times = get_dataset(system_id=system_id, points=points)
+def get_and_process_data(file_path, tokenizer, system_id=0, points=100, alpha=5, decimals=3):
+    """
+    Load and preprocess the dataset, including scaling and encoding.
+    
+    Args:
+        tokenizer (transformers.PreTrainedTokenizer): The tokenizer to use.
+        system_id (int): The ID of the system to load.
+        points (int): The number of points to load.
+        alpha (float): Scaling factor.
+        decimals (int): Number of decimal places for scaling.
+        
+    Returns:
+        tokenized_data (dict): Tokenized data.
+        encoded (str): Encoded data.
+        combined_data (np.ndarray): Data of original and scaled numerical values.
+        times (np.ndarray): Time points.
+    """
+    prey, predator, times = get_dataset(file_path, system_id=system_id, points=points)
     scaled = scaler(prey, predator, alpha = alpha, decimals=decimals)
     new_prey, new_predator = scaled[:, 0], scaled[:, 1] 
     encoded = encoding(new_prey, new_predator)
@@ -70,6 +129,9 @@ def get_and_process_data(system_id=0, points=100, alpha=5, decimals=3):
     return tokenized_data, encoded, np.column_stack((prey, predator, new_prey, new_predator)), times
 
 def load_and_preprocess(file_path, test_size=0.2, alpha=5, decimals=3):
+    """
+    Load and preprocess the dataset from an HDF5 file.
+    """
     with h5py.File(file_path, "r") as f:
         trajectories = f["trajectories"][:]
         prey = trajectories[:, :, 0]
@@ -93,6 +155,55 @@ def load_and_preprocess(file_path, test_size=0.2, alpha=5, decimals=3):
 
     return data
 
+def load_and_process_example(file_path, tokenizer, points=100, test_size=0.2, alpha=5, decimals=3, seed=441):
+    """
+    Load and preprocess a specific example from the dataset.
+
+    Args:
+        file_path (str): Path to the HDF5 file.
+        tokenizer (transformers.PreTrainedTokenizer): The tokenizer to use.
+        points (int): The number of points to load.
+        test_size (float): Proportion of the dataset to include in the test split.
+        alpha (float): Scaling factor.
+        decimals (int): Number of decimal places for scaling.
+    Returns:
+        tokenized_data (torch.Tensor): Tokenized data.
+        encoded (str): Encoded data.
+        combined_data (np.ndarray): Data of original and scaled numerical values.
+        time (np.ndarray): Time points.
+    """
+    with h5py.File(file_path, "r") as f:
+        trajectories = f["trajectories"][:]
+        prey = trajectories[:, :, 0]
+        predator = trajectories[:, :, 1]
+        time = f["time"][:]
+
+    scaled = scaler(prey, predator, alpha=alpha, decimals=decimals)
+    new_prey = scaled[:, :, 0]
+    new_predator = scaled[:, :, 1]
+
+    stacked_data = np.stack((new_prey, new_predator), axis=-1)
+    stacked = np.stack((prey, predator), axis=-1)
+
+    np.random.seed(seed)
+
+    _, temp_data = train_test_split(stacked_data, test_size=test_size, shuffle=True)
+    _, test_data = train_test_split(temp_data, test_size=0.5, shuffle=True)
+
+    np.random.seed(seed)
+
+    _, temp = train_test_split(stacked, test_size=test_size, shuffle=True)
+    _, test = train_test_split(temp, test_size=0.5, shuffle=True)
+
+    prey, predator = test[0, :, 0], test[0, :, 1]
+    new_prey, new_predator = test_data[0, :, 0], test_data[0, :, 1]
+
+    encoded = encoding(test_data[0, :, 0], test_data[0, :, 1])
+    given_text = ';'.join([chunk for i, chunk in enumerate(encoded.split(';')) if i < points])
+    tokenized_data = tokenizer(given_text, return_tensors="pt")
+    
+    return tokenized_data, given_text, np.column_stack((prey, predator, new_prey, new_predator)), time
+
 def process_data(texts, tokenizer, points=80):
     given_input_ids = []
     for text in texts:
@@ -102,20 +213,22 @@ def process_data(texts, tokenizer, points=80):
     return np.stack([text for text in texts]), torch.stack(given_input_ids)
 
 
-if __name__ == "__main__":
+def generate_data(model, tokenizer, system_id=0, output_points=100, alpha=5, decimals=3):
 
-    parser = argparse.ArgumentParser(description="preprocess lotka-volterra data")
-    parser.add_argument("-s", "--system_id", type=int, default=0, help="system id")
-    parser.add_argument("-p", "--points", type=int, default=1000, help="number of data points")
-    parser.add_argument("-a", "--alpha", type=int, default=40, help="scaling factor")
-    parser.add_argument("-d", "--decimals", type=int, default=3, help="number of decimal places to round")
+    full_tokenized_data, _, full_combined_data, full_times = get_and_process_data(tokenizer, system_id=system_id, points=100, alpha=alpha, decimals=decimals)
+    
+    max_token_length = max(full_tokenized_data["input_ids"].shape[1] + 1, 1200) #1180
+    
+    actual_prey, actual_predator = full_combined_data[:,2], full_combined_data[:,3]
 
-    args = parser.parse_args()
+    tokenized_data = get_and_process_data(tokenizer, system_id=system_id, points=output_points)[0]
 
-    print("EXAMPLE (SYSTEM_ID=0, POINTS=3):")
-    tokenized_data, preprocessed_data, combined_data, times = process_data(points=3)
-    print("Preprocessed data:", preprocessed_data)
-    print("Tokenized results:", tokenized_data["input_ids"].tolist()[0])
-
-    tokenized_data, preprocessed_data, combined_data, times = process_data(system_id=args.system_id, points=args.points, alpha=args.alpha, decimals=args.decimals)
-    joblib.dump(tokenized_data, "tokenized_data.pkl")
+    model.eval()
+    
+    with torch.no_grad():
+        output = model.generate(tokenized_data["input_ids"], attention_mask = tokenized_data["attention_mask"], max_new_tokens = max_token_length)
+    
+    prediction = tokenizer.decode(output[0])
+    pred_prey, pred_predator = decoding(prediction)
+    
+    return pred_prey, pred_predator, actual_prey, actual_predator, full_times

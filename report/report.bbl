@@ -1,0 +1,29 @@
+\begin{thebibliography}{2}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{}
+
+\bibitem[{Gruver et~al.(2024)Nate Gruver and Marc Finzi and Shikai Qiu and
+  Andrew Gordon Wilson}]{gruver2024largelanguagemodelszeroshot}
+Gruver N, Finzi M, Qiu S, Wilson AG, Large Language Models Are Zero-Shot Time
+  Series Forecasters; 2024.
+\newblock \urlprefix\url{https://arxiv.org/abs/2310.07820}.
+
+\bibitem[{Yang et~al.(2024)An Yang and Baosong Yang and Binyuan Hui and Bo
+  Zheng and Bowen Yu and Chang Zhou and Chengpeng Li and Chengyuan Li and
+  Dayiheng Liu and Fei Huang and Guanting Dong and Haoran Wei and Huan Lin and
+  Jialong Tang and Jialin Wang and Jian Yang and Jianhong Tu and Jianwei Zhang
+  and Jianxin Ma and Jianxin Yang and Jin Xu and Jingren Zhou and Jinze Bai and
+  Jinzheng He and Junyang Lin and Kai Dang and Keming Lu and Keqin Chen and
+  Kexin Yang and Mei Li and Mingfeng Xue and Na Ni and Pei Zhang and Peng Wang
+  and Ru Peng and Rui Men and Ruize Gao and Runji Lin and Shijie Wang and Shuai
+  Bai and Sinan Tan and Tianhang Zhu and Tianhao Li and Tianyu Liu and Wenbin
+  Ge and Xiaodong Deng and Xiaohuan Zhou and Xingzhang Ren and Xinyu Zhang and
+  Xipin Wei and Xuancheng Ren and Xuejing Liu and Yang Fan and Yang Yao and
+  Yichang Zhang and Yu Wan and Yunfei Chu and Yuqiong Liu and Zeyu Cui and
+  Zhenru Zhang and Zhifang Guo and Zhihao Fan}]{yang2024qwen2technicalreport}
+Yang A, Yang B, Hui B, Zheng B, Yu B, Zhou C, et~al., Qwen2 Technical Report;
+  2024.
+\newblock \urlprefix\url{https://arxiv.org/abs/2407.10671}.
+
+\end{thebibliography}

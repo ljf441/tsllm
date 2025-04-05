@@ -1,0 +1,11 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+    \PYG{k}{def} \PYG{n+nf}{scale\PYGZus{}and\PYGZus{}encode}\PYG{p}{(}\PYG{n}{prey}\PYG{p}{,} \PYG{n}{predator}\PYG{p}{,} \PYG{n}{alpha}\PYG{p}{,} \PYG{n}{decimals}\PYG{p}{):}
+    \PYG{n}{prey} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n}{prey}\PYG{p}{)}
+    \PYG{n}{predator} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n}{predator}\PYG{p}{)}
+    \PYG{n}{data} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{stack}\PYG{p}{([}\PYG{n}{prey}\PYG{p}{,} \PYG{n}{predator}\PYG{p}{],} \PYG{n}{axis}\PYG{o}{=\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}
+    \PYG{n}{rescaled} \PYG{o}{=} \PYG{n}{data}\PYG{o}{/}\PYG{n}{alpha} \PYG{o}{*} \PYG{l+m+mi}{10}
+    \PYG{n}{rescaled} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{round}\PYG{p}{(}\PYG{n}{rescaled}\PYG{p}{,} \PYG{n}{decimals}\PYG{o}{=}\PYG{n}{decimals}\PYG{p}{)}
+    \PYG{n}{series} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{column\PYGZus{}stack}\PYG{p}{((}\PYG{n}{rescaled}\PYG{p}{[:,} \PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{rescaled}\PYG{p}{[:,} \PYG{l+m+mi}{1}\PYG{p}{]))}
+    \PYG{n}{encoded} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{};\PYGZsq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{([}\PYG{l+s+s1}{\PYGZsq{},\PYGZsq{}}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n+nb}{map}\PYG{p}{(}\PYG{n+nb}{str}\PYG{p}{,} \PYG{n}{row}\PYG{p}{))} \PYG{k}{for} \PYG{n}{row} \PYG{o+ow}{in} \PYG{n}{series}\PYG{p}{])}
+    \PYG{k}{return} \PYG{n}{encoded}
+\end{Verbatim}

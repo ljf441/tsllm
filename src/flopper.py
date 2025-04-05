@@ -54,7 +54,7 @@ class Flopper:
             
         # Compute the RMS:
         flops = (m*n +      #square each element
-                 m*n-1 +    #summing of squared elements
+                 m*(n-1) +    #summing of squared elements
                  m +        #multiply by 1/hidden_size
                  m*10       #sqrt
         )
