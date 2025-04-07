@@ -3,7 +3,6 @@
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
 \citation{gruver2024largelanguagemodelszeroshot}
-\citation{gruver2024largelanguagemodelszeroshot}
 \citation{yang2024qwen2technicalreport}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {2}Compute constraints}{1}{section.2}\protected@file@percent }
@@ -21,35 +20,102 @@
 \newlabel{zero@cref}{{[section][3][]3}{[1][2][]2}}
 \newlabel{eq:scale}{{1}{2}{Preprocessing}{equation.3.1}{}}
 \newlabel{eq:scale@cref}{{[equation][1][]1}{[1][2][]2}}
+\newlabel{eq:encode}{{2}{2}{Preprocessing}{equation.3.2}{}}
+\newlabel{eq:encode@cref}{{[equation][2][]2}{[1][2][]2}}
 \@writefile{lol}{\contentsline {listing}{\numberline {1}{\ignorespaces Function to preprocess the time series data. The function takes in the prey and predator values, the scaling factor $\alpha $, and the number of decimal places to round to. It returns the encoded string representation of the time series data.}}{3}{listing.1}\protected@file@percent }
 \newlabel{lst:preprocess}{{1}{3}{Preprocessing}{listing.1}{}}
-\newlabel{lst:preprocess@cref}{{[listing][1][]1}{[1][3][]3}}
-\newlabel{eq:encode}{{2}{3}{Preprocessing}{equation.3.2}{}}
-\newlabel{eq:encode@cref}{{[equation][2][]2}{[1][2][]3}}
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Example of the preprocessing steps for two steps in the time series data. The raw data is scaled, encoded, and then tokenized.}}{4}{table.3}\protected@file@percent }
-\newlabel{tab:example}{{3}{4}{Example of the preprocessing steps for two steps in the time series data. The raw data is scaled, encoded, and then tokenized}{table.3}{}}
+\newlabel{lst:preprocess@cref}{{[listing][1][]1}{[1][2][]3}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Example of the preprocessing method for two steps in the time series data. The raw data is scaled, encoded, and then tokenized.}}{4}{table.3}\protected@file@percent }
+\newlabel{tab:example}{{3}{4}{Example of the preprocessing method for two steps in the time series data. The raw data is scaled, encoded, and then tokenized}{table.3}{}}
 \newlabel{tab:example@cref}{{[table][3][]3}{[1][3][]4}}
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Another example of the preprocessing steps for two steps in the time series data. The raw data is scaled, encoded, and then tokenized.}}{4}{table.4}\protected@file@percent }
-\newlabel{tab:example2}{{4}{4}{Another example of the preprocessing steps for two steps in the time series data. The raw data is scaled, encoded, and then tokenized}{table.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Another example of the preprocessing method for two steps in the time series data.}}{4}{table.4}\protected@file@percent }
+\newlabel{tab:example2}{{4}{4}{Another example of the preprocessing method for two steps in the time series data}{table.4}{}}
 \newlabel{tab:example2@cref}{{[table][4][]4}{[1][3][]4}}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Baseline}{5}{section.4}\protected@file@percent }
 \newlabel{sec:baseline}{{4}{5}{Baseline}{section.4}{}}
 \newlabel{sec:baseline@cref}{{[section][4][]4}{[1][5][]5}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Predictions of the untrained Qwen2.5-0.5B-Instruct model on system 870 of the Lotka-Volterra time series data. The model was given the first 80 points in the time-series data and asked to predict the next 20 points for both the predator (purple) and prey (gold) time series. The model's predictions are shown in the solid lines, while the true values are shown in the dashed lines.}}{5}{figure.1}\protected@file@percent }
-\newlabel{fig:baseline_pred}{{1}{5}{Predictions of the untrained Qwen2.5-0.5B-Instruct model on system 870 of the Lotka-Volterra time series data. The model was given the first 80 points in the time-series data and asked to predict the next 20 points for both the predator (purple) and prey (gold) time series. The model's predictions are shown in the solid lines, while the true values are shown in the dashed lines}{figure.1}{}}
-\newlabel{fig:baseline_pred@cref}{{[figure][1][]1}{[1][5][]5}}
-\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Metrics for the untrained Qwen2.5-0.5B-Instruct model performance on system 870 of the Lotka-Volterra time series data. The model was given the first 80 points in the time-series data and asked to predict the next 20 points. The metrics are calculated for both the overall time series and the out-of-distribution data only.}}{6}{table.5}\protected@file@percent }
-\newlabel{tab:baseline}{{5}{6}{Metrics for the untrained Qwen2.5-0.5B-Instruct model performance on system 870 of the Lotka-Volterra time series data. The model was given the first 80 points in the time-series data and asked to predict the next 20 points. The metrics are calculated for both the overall time series and the out-of-distribution data only}{table.5}{}}
-\newlabel{tab:baseline@cref}{{[table][5][]5}{[1][5][]6}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Running mean squared error (RMSE) for the untrained Qwen2.5-0.5B-Instruct model on system 870 of the Lotka-Volterra time series data. The model was given the first 80 points in the time-series data and asked to predict the next 20 points for both the predator (purple) and prey (gold) time series.}}{6}{figure.2}\protected@file@percent }
-\newlabel{fig:baseline_rmse}{{2}{6}{Running mean squared error (RMSE) for the untrained Qwen2.5-0.5B-Instruct model on system 870 of the Lotka-Volterra time series data. The model was given the first 80 points in the time-series data and asked to predict the next 20 points for both the predator (purple) and prey (gold) time series}{figure.2}{}}
-\newlabel{fig:baseline_rmse@cref}{{[figure][2][]2}{[1][5][]6}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Metrics for the untrained Qwen2.5-0.5B-Instruct model performance on a subset of the test set. The metrics are calculated for the 20 points comprising the out-of-distribution data only.}}{5}{table.5}\protected@file@percent }
+\newlabel{tab:baseline}{{5}{5}{Metrics for the untrained Qwen2.5-0.5B-Instruct model performance on a subset of the test set. The metrics are calculated for the 20 points comprising the out-of-distribution data only}{table.5}{}}
+\newlabel{tab:baseline@cref}{{[table][5][]5}{[1][5][]5}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Predictions of the untrained Qwen2.5-0.5B-Instruct model on a subset of the Lotka-Volterra time series data for both predator (purple) and prey (gold). The model's predictions are shown in the dashed lines, while the true values are shown in the solid lines.}}{7}{figure.1}\protected@file@percent }
+\newlabel{fig:baseline_pred}{{1}{7}{Predictions of the untrained Qwen2.5-0.5B-Instruct model on a subset of the Lotka-Volterra time series data for both predator (purple) and prey (gold). The model's predictions are shown in the dashed lines, while the true values are shown in the solid lines}{figure.1}{}}
+\newlabel{fig:baseline_pred@cref}{{[figure][1][]1}{[1][5][]7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Running mean squared error (RMSE) for the untrained Qwen2.5-0.5B-Instruct model on a subset of the test set over the out-of-distribution data for the predator (purple) and prey (gold) time series.}}{8}{figure.2}\protected@file@percent }
+\newlabel{fig:baseline_rmse}{{2}{8}{Running mean squared error (RMSE) for the untrained Qwen2.5-0.5B-Instruct model on a subset of the test set over the out-of-distribution data for the predator (purple) and prey (gold) time series}{figure.2}{}}
+\newlabel{fig:baseline_rmse@cref}{{[figure][2][]2}{[1][5][]8}}
+\citation{hu2021loralowrankadaptationlarge}
+\@writefile{toc}{\contentsline {section}{\numberline {5}LoRA}{9}{section.5}\protected@file@percent }
+\newlabel{sec:lora}{{5}{9}{LoRA}{section.5}{}}
+\newlabel{sec:lora@cref}{{[section][5][]5}{[1][9][]9}}
+\newlabel{eq:lora}{{3}{9}{LoRA}{equation.5.3}{}}
+\newlabel{eq:lora@cref}{{[equation][3][]3}{[1][9][]9}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Training with LoRA}{9}{subsection.5.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Default hyperparameters used for training the Qwen2.5-0.5B-Instruct model with LoRA on the Lotka-Volterra time series data.}}{9}{table.6}\protected@file@percent }
+\newlabel{tab:lora_default}{{6}{9}{Default hyperparameters used for training the Qwen2.5-0.5B-Instruct model with LoRA on the Lotka-Volterra time series data}{table.6}{}}
+\newlabel{tab:lora_default@cref}{{[table][6][]6}{[1][9][]9}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Training and validation loss for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra time series data using default hyperparameters. The bottom figure compares the training (blue) and validation (red) loss using the same resolution of every 50 steps whilst the top figure shows the training loss at every step and the middle figure shows the validation loss at every 50th step.}}{10}{figure.3}\protected@file@percent }
+\newlabel{fig:lora_default_loss}{{3}{10}{Training and validation loss for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra time series data using default hyperparameters. The bottom figure compares the training (blue) and validation (red) loss using the same resolution of every 50 steps whilst the top figure shows the training loss at every step and the middle figure shows the validation loss at every 50th step}{figure.3}{}}
+\newlabel{fig:lora_default_loss@cref}{{[figure][3][]3}{[1][9][]10}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Predictions of the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA using default hyperparameters on a subset of the test set for both predator (purple) and prey (gold). The model's predictions are shown in the dashed lines, while the true values are shown in the solid lines.}}{11}{figure.4}\protected@file@percent }
+\newlabel{fig:lora_default_pred}{{4}{11}{Predictions of the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA using default hyperparameters on a subset of the test set for both predator (purple) and prey (gold). The model's predictions are shown in the dashed lines, while the true values are shown in the solid lines}{figure.4}{}}
+\newlabel{fig:lora_default_pred@cref}{{[figure][4][]4}{[1][9][]11}}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Metrics for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA using default hyperparameters on a subset of the test set. The metrics are calculated for the 20 points comprising the out-of-distribution data only.}}{12}{table.7}\protected@file@percent }
+\newlabel{tab:lora_default_metrics}{{7}{12}{Metrics for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA using default hyperparameters on a subset of the test set. The metrics are calculated for the 20 points comprising the out-of-distribution data only}{table.7}{}}
+\newlabel{tab:lora_default_metrics@cref}{{[table][7][]7}{[1][12][]12}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Hyperparameter tuning}{12}{subsection.5.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Hyperparameters tuned for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra time series data.}}{13}{table.8}\protected@file@percent }
+\newlabel{tab:lora_tuning}{{8}{13}{Hyperparameters tuned for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra time series data}{table.8}{}}
+\newlabel{tab:lora_tuning@cref}{{[table][8][]8}{[1][12][]13}}
+\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces Final validation loss for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra time series data using different combinations of $\eta $ and $r$.}}{13}{table.9}\protected@file@percent }
+\newlabel{tab:lora_lr_rank}{{9}{13}{Final validation loss for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra time series data using different combinations of $\eta $ and $r$}{table.9}{}}
+\newlabel{tab:lora_lr_rank@cref}{{[table][9][]9}{[1][13][]13}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.1}Learning rate and LoRA rank}{13}{subsubsection.5.2.1}\protected@file@percent }
+\newlabel{sec:lora_lr}{{5.2.1}{13}{Learning rate and LoRA rank}{subsubsection.5.2.1}{}}
+\newlabel{sec:lora_lr@cref}{{[subsubsection][1][5,2]5.2.1}{[1][12][]13}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Training (top) and validation (bottom) loss for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra time series data using different $\eta $ and $r$.}}{14}{figure.5}\protected@file@percent }
+\newlabel{fig:lora_lr_rank_loss}{{5}{14}{Training (top) and validation (bottom) loss for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra time series data using different $\eta $ and $r$}{figure.5}{}}
+\newlabel{fig:lora_lr_rank_loss@cref}{{[figure][5][]5}{[1][12][]14}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.2}Maximum context length}{15}{subsubsection.5.2.2}\protected@file@percent }
+\newlabel{sec:max_ctx}{{5.2.2}{15}{Maximum context length}{subsubsection.5.2.2}{}}
+\newlabel{sec:max_ctx@cref}{{[subsubsection][2][5,2]5.2.2}{[1][15][]15}}
+\@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces Final validation loss for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra time series data using different maximum context lengths with $\eta =0.0001$ and $r=8$.}}{15}{table.10}\protected@file@percent }
+\newlabel{tab:lora_max_context}{{10}{15}{Final validation loss for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra time series data using different maximum context lengths with $\eta =0.0001$ and $r=8$}{table.10}{}}
+\newlabel{tab:lora_max_context@cref}{{[table][10][]10}{[1][15][]15}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Training (top) and validation (bottom) loss for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra time series data using different maximum context lengths with $\eta =0.0001$ and $r=8$.}}{16}{figure.6}\protected@file@percent }
+\newlabel{fig:lora_max_context_loss}{{6}{16}{Training (top) and validation (bottom) loss for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra time series data using different maximum context lengths with $\eta =0.0001$ and $r=8$}{figure.6}{}}
+\newlabel{fig:lora_max_context_loss@cref}{{[figure][6][]6}{[1][15][]16}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Final model}{17}{subsection.5.3}\protected@file@percent }
+\newlabel{sec:final_model}{{5.3}{17}{Final model}{subsection.5.3}{}}
+\newlabel{sec:final_model@cref}{{[subsection][3][5]5.3}{[1][17][]17}}
+\@writefile{lot}{\contentsline {table}{\numberline {11}{\ignorespaces Final best hyperparameters for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra time series data.}}{17}{table.11}\protected@file@percent }
+\newlabel{tab:lora_final_hyperparameters}{{11}{17}{Final best hyperparameters for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra time series data}{table.11}{}}
+\newlabel{tab:lora_final_hyperparameters@cref}{{[table][11][]11}{[1][17][]17}}
+\@writefile{lot}{\contentsline {table}{\numberline {12}{\ignorespaces Metrics for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA using the final best hyperparameters on a subset from the test set. The metrics are calculated for the 20 points comprising the out-of-distribution data only.}}{17}{table.12}\protected@file@percent }
+\newlabel{tab:lora_final_metrics}{{12}{17}{Metrics for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA using the final best hyperparameters on a subset from the test set. The metrics are calculated for the 20 points comprising the out-of-distribution data only}{table.12}{}}
+\newlabel{tab:lora_final_metrics@cref}{{[table][12][]12}{[1][17][]17}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Training (top) and validation (middle) loss for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra dataset using the final best hyperparameters. The bottom figure directly compares the training (blue) and validation (red) loss using the same resolution of every 50 steps.}}{18}{figure.7}\protected@file@percent }
+\newlabel{fig:lora_final_loss}{{7}{18}{Training (top) and validation (middle) loss for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra dataset using the final best hyperparameters. The bottom figure directly compares the training (blue) and validation (red) loss using the same resolution of every 50 steps}{figure.7}{}}
+\newlabel{fig:lora_final_loss@cref}{{[figure][7][]7}{[1][17][]18}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Predictions of the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA using the final best hyperparameters on a subset of the test set for both predator (purple) and prey (gold). The model's predictions are shown in the dashed lines, while the true values are shown in the solid lines.}}{19}{figure.8}\protected@file@percent }
+\newlabel{fig:lora_final_pred}{{8}{19}{Predictions of the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA using the final best hyperparameters on a subset of the test set for both predator (purple) and prey (gold). The model's predictions are shown in the dashed lines, while the true values are shown in the solid lines}{figure.8}{}}
+\newlabel{fig:lora_final_pred@cref}{{[figure][8][]8}{[1][17][]19}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Running mean squared error (RMSE) for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA using the final best hyperparameters on a subset of the test set over the out-of-distribution data for the predator (purple) and prey (gold) time series.}}{20}{figure.9}\protected@file@percent }
+\newlabel{fig:lora_final_rmse}{{9}{20}{Running mean squared error (RMSE) for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA using the final best hyperparameters on a subset of the test set over the out-of-distribution data for the predator (purple) and prey (gold) time series}{figure.9}{}}
+\newlabel{fig:lora_final_rmse@cref}{{[figure][9][]9}{[1][17][]20}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}FLOPS usage}{21}{section.6}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {13}{\ignorespaces FLOPS usage for each stage of the coursework including inference by the untrained model; training and inference of the LoRA adapted model with default hyperparameters; grid search of $\eta $, LoRA rank, and context length; and the training and inference of the final model.}}{21}{table.13}\protected@file@percent }
+\newlabel{tab:flops_track}{{13}{21}{FLOPS usage for each stage of the coursework including inference by the untrained model; training and inference of the LoRA adapted model with default hyperparameters; grid search of $\eta $, LoRA rank, and context length; and the training and inference of the final model}{table.13}{}}
+\newlabel{tab:flops_track@cref}{{[table][13][]13}{[1][21][]21}}
+\citation{hu2021loralowrankadaptationlarge}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Further improvements}{22}{section.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {8}Summary}{22}{section.8}\protected@file@percent }
 \bibstyle{vancouver-authoryear}
 \bibdata{bibliography}
 \bibcite{gruver2024largelanguagemodelszeroshot}{{1}{2024}{{Gruver et~al.}}{{Nate Gruver and Marc Finzi and Shikai Qiu and Andrew Gordon Wilson}}}
-\bibcite{yang2024qwen2technicalreport}{{2}{2024}{{Yang et~al.}}{{An Yang and Baosong Yang and Binyuan Hui and Bo Zheng and Bowen Yu and Chang Zhou and Chengpeng Li and Chengyuan Li and Dayiheng Liu and Fei Huang and Guanting Dong and Haoran Wei and Huan Lin and Jialong Tang and Jialin Wang and Jian Yang and Jianhong Tu and Jianwei Zhang and Jianxin Ma and Jianxin Yang and Jin Xu and Jingren Zhou and Jinze Bai and Jinzheng He and Junyang Lin and Kai Dang and Keming Lu and Keqin Chen and Kexin Yang and Mei Li and Mingfeng Xue and Na Ni and Pei Zhang and Peng Wang and Ru Peng and Rui Men and Ruize Gao and Runji Lin and Shijie Wang and Shuai Bai and Sinan Tan and Tianhang Zhu and Tianhao Li and Tianyu Liu and Wenbin Ge and Xiaodong Deng and Xiaohuan Zhou and Xingzhang Ren and Xinyu Zhang and Xipin Wei and Xuancheng Ren and Xuejing Liu and Yang Fan and Yang Yao and Yichang Zhang and Yu Wan and Yunfei Chu and Yuqiong Liu and Zeyu Cui and Zhenru Zhang and Zhifang Guo and Zhihao Fan}}}
+\bibcite{hu2021loralowrankadaptationlarge}{{2}{2021}{{Hu et~al.}}{{Edward J. Hu and Yelong Shen and Phillip Wallis and Zeyuan Allen-Zhu and Yuanzhi Li and Shean Wang and Lu Wang and Weizhu Chen}}}
+\bibcite{yang2024qwen2technicalreport}{{3}{2024}{{Yang et~al.}}{{An Yang and Baosong Yang and Binyuan Hui and Bo Zheng and Bowen Yu and Chang Zhou and Chengpeng Li and Chengyuan Li and Dayiheng Liu and Fei Huang and Guanting Dong and Haoran Wei and Huan Lin and Jialong Tang and Jialin Wang and Jian Yang and Jianhong Tu and Jianwei Zhang and Jianxin Ma and Jianxin Yang and Jin Xu and Jingren Zhou and Jinze Bai and Jinzheng He and Junyang Lin and Kai Dang and Keming Lu and Keqin Chen and Kexin Yang and Mei Li and Mingfeng Xue and Na Ni and Pei Zhang and Peng Wang and Ru Peng and Rui Men and Ruize Gao and Runji Lin and Shijie Wang and Shuai Bai and Sinan Tan and Tianhang Zhu and Tianhao Li and Tianyu Liu and Wenbin Ge and Xiaodong Deng and Xiaohuan Zhou and Xingzhang Ren and Xinyu Zhang and Xipin Wei and Xuancheng Ren and Xuejing Liu and Yang Fan and Yang Yao and Yichang Zhang and Yu Wan and Yunfei Chu and Yuqiong Liu and Zeyu Cui and Zhenru Zhang and Zhifang Guo and Zhihao Fan}}}
 \gdef\minted@oldcachelist{,
   default.pygstyle,
-  B9FC7E34FB4D64478DECE298A669FC077C1A109740FF5E49AE684E149A3B6943.pygtex}
-\@writefile{toc}{\contentsline {section}{\numberline {A}Use of auto-generation tools}{7}{appendix.A}\protected@file@percent }
-\gdef \@abspage@last{7}
+  6E1C69EE4C7ED986D98890AFB5517EBE7C1A109740FF5E49AE684E149A3B6943.pygtex}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Use of auto-generation tools}{24}{appendix.A}\protected@file@percent }
+\gdef \@abspage@last{24}

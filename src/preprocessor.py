@@ -128,7 +128,7 @@ def get_and_process_data(file_path, tokenizer, system_id=0, points=100, alpha=5,
     tokenized_data = tokenizer(encoded, return_tensors="pt")
     return tokenized_data, encoded, np.column_stack((prey, predator, new_prey, new_predator)), times
 
-def load_and_preprocess(file_path, test_size=0.2, alpha=5, decimals=3):
+def load_and_preprocess(file_path, test_size=0.2, alpha=5, decimals=3, seed=442):
     """
     Load and preprocess the dataset from an HDF5 file, applying scaling and encoding.
     Args:
@@ -150,6 +150,8 @@ def load_and_preprocess(file_path, test_size=0.2, alpha=5, decimals=3):
 
     stacked_data = np.stack((new_prey, new_predator), axis=-1)
 
+    np.random.seed(seed)
+
     train_data, temp_data = train_test_split(stacked_data, test_size=test_size, shuffle=True)
     val_data, test_data = train_test_split(temp_data, test_size=0.5, shuffle=True)
 
@@ -162,7 +164,7 @@ def load_and_preprocess(file_path, test_size=0.2, alpha=5, decimals=3):
 
     return data
 
-def load_and_process_example(file_path, tokenizer, points=100, test_size=0.2, alpha=5, decimals=3, seed=441):
+def load_and_process_example(file_path, tokenizer, points=100, test_size=0.2, alpha=5, decimals=3, seed=442, id=0):
     """
     Load and preprocess a specific example from the dataset, applying scaling and encoding.
 
@@ -202,10 +204,10 @@ def load_and_process_example(file_path, tokenizer, points=100, test_size=0.2, al
     _, temp = train_test_split(stacked, test_size=test_size, shuffle=True)
     _, test = train_test_split(temp, test_size=0.5, shuffle=True)
 
-    prey, predator = test[0, :, 0], test[0, :, 1]
-    new_prey, new_predator = test_data[0, :, 0], test_data[0, :, 1]
+    prey, predator = test[id, :, 0], test[id, :, 1]
+    new_prey, new_predator = test_data[id, :, 0], test_data[id, :, 1]
 
-    encoded = encoding(test_data[0, :, 0], test_data[0, :, 1])
+    encoded = encoding(test_data[id, :, 0], test_data[id, :, 1])
     given_text = ';'.join([chunk for i, chunk in enumerate(encoded.split(';')) if i < points])
     tokenized_data = tokenizer(given_text, return_tensors="pt")
     

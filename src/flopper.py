@@ -54,7 +54,7 @@ class Flopper:
             
         # Compute the RMS:
         flops = (m*n +      #square each element
-                 m*(n-1) +    #summing of squared elements
+                 m*n-1 +    #summing of squared elements
                  m +        #multiply by 1/hidden_size
                  m*10       #sqrt
         )
@@ -156,10 +156,23 @@ class Flopper:
         return flops
 
     def forward_and_back(self):
+        # backpropagation is assumed to be twice the forward pass
         return self.forward_pass() + 2*self.forward_pass(new_batch_size=1)
     
     def compute_flops(self):
+        # forward and backpropagation is computed for every training step
         self.total_flops = self.num_steps_training*self.forward_and_back()
+        return self.total_flops
+
+    def compute_validation(self):
+        # when computing validation loss, model only goes through the forward pass
+        self.total_flops = self.forward_pass()
+        return self.total_flops
+    
+    def compute_inference(self):
+        # when in inference mode, the model is only passed one sequence at a times
+        self.sequence_length = 1200 # one full sequence has a maximum of around 1200 tokens
+        self.total_flops = self.forward_pass(new_batch_size=1)
         return self.total_flops
     
 
@@ -170,10 +183,21 @@ def parse_args():
     parser.add_argument("-b", "--batch_size", type=int, default=4, help="Batch size")
     parser.add_argument("-l", "--use_lora", type=bool, default=False, help="Use LoRA")
     parser.add_argument("-r", "--lora_rank", type=int, default=None, help="LoRA rank")
+    parser.add_argument("-m", "--mode", type=str, default="T", help="Training [T]; Validation [V]; Inference [I]")
     return parser.parse_args()
 
 if __name__ == "__main__":
     args = parse_args()
     model_flops = Flopper(sequence_length=args.sequence_length, model=None, num_steps_training=args.num_steps_training, batch_size=args.batch_size, use_lora=args.use_lora, lora_rank=args.lora_rank)
-    model_flops.compute_flops()
-    print(model_flops)
+    mode = args.mode
+    if (mode.capitalize() == "T"):
+        model_flops.compute_flops()
+        print(model_flops)
+    elif (mode.capitalize() == "V"):
+        total = model_flops.compute_validation() * args.num_steps_training//50
+        print(f"{total:.4e}")
+    elif (mode.capitalize() == "I"):
+        model_flops.compute_validation()
+        print(model_flops)
+    else:
+        print("ERROR: INCORRECT MODE \nCHOOSE BETWEEN [T]RAINING; [V]ALIDATION; [I]NFERENCE")
