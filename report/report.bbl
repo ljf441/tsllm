@@ -1,4 +1,4 @@
-\begin{thebibliography}{3}
+\begin{thebibliography}{5}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \providecommand{\urlprefix}{}
@@ -11,8 +11,16 @@ Gruver N, Finzi M, Qiu S, Wilson AG, Large Language Models Are Zero-Shot Time Se
 Hu EJ, Shen Y, Wallis P, Allen-Zhu Z, Li Y, Wang S, et~al., LoRA: Low-Rank Adaptation of Large Language Models; 2021.
 \newblock \urlprefix\url{https://arxiv.org/abs/2106.09685}.
 
+\bibitem[{Shazeer(2020)Noam Shazeer}]{shazeer2020gluvariantsimprovetransformer}
+Shazeer N, GLU Variants Improve Transformer; 2020.
+\newblock \urlprefix\url{https://arxiv.org/abs/2002.05202}.
+
 \bibitem[{Yang et~al.(2024)An Yang and Baosong Yang and Binyuan Hui and Bo Zheng and Bowen Yu and Chang Zhou and Chengpeng Li and Chengyuan Li and Dayiheng Liu and Fei Huang and Guanting Dong and Haoran Wei and Huan Lin and Jialong Tang and Jialin Wang and Jian Yang and Jianhong Tu and Jianwei Zhang and Jianxin Ma and Jianxin Yang and Jin Xu and Jingren Zhou and Jinze Bai and Jinzheng He and Junyang Lin and Kai Dang and Keming Lu and Keqin Chen and Kexin Yang and Mei Li and Mingfeng Xue and Na Ni and Pei Zhang and Peng Wang and Ru Peng and Rui Men and Ruize Gao and Runji Lin and Shijie Wang and Shuai Bai and Sinan Tan and Tianhang Zhu and Tianhao Li and Tianyu Liu and Wenbin Ge and Xiaodong Deng and Xiaohuan Zhou and Xingzhang Ren and Xinyu Zhang and Xipin Wei and Xuancheng Ren and Xuejing Liu and Yang Fan and Yang Yao and Yichang Zhang and Yu Wan and Yunfei Chu and Yuqiong Liu and Zeyu Cui and Zhenru Zhang and Zhifang Guo and Zhihao Fan}]{yang2024qwen2technicalreport}
 Yang A, Yang B, Hui B, Zheng B, Yu B, Zhou C, et~al., Qwen2 Technical Report; 2024.
 \newblock \urlprefix\url{https://arxiv.org/abs/2407.10671}.
+
+\bibitem[{Zhang and Sennrich(2019)Biao Zhang and Rico Sennrich}]{zhang2019rootmeansquarelayer}
+Zhang B, Sennrich R, Root Mean Square Layer Normalization; 2019.
+\newblock \urlprefix\url{https://arxiv.org/abs/1910.07467}.
 
 \end{thebibliography}

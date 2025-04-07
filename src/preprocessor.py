@@ -1,11 +1,7 @@
 import h5py
 import numpy as np
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
-import joblib
-import argparse
 from sklearn.model_selection import train_test_split
-from qwen import load_qwen
 
 def get_dataset(file_path, system_id=0, points=100):
     """

@@ -63,7 +63,7 @@ pdfauthor = {Laura Just Fung (lj441)}
     \\
     April 7, 2025
     \\
-    Word count: 2996
+    Word count: 2997
 \end{center}
 
 \section{Introduction}
@@ -97,10 +97,21 @@ While Qwen2.5-0.5B-Instruct uses Grouped Query Attention, the FLOPS for standard
 As previously stated in Section~\ref{sec:flops_calc}, the cost of calculating RoPE is not included but the cost of adding them to the input token embedded matrix $T_{D \times N}$ is. $D=896$ is the dimension of embedding and $V=151,936$ is the vocabulary size. The cost of adding the RoPE is thus $DN$ FLOPS.
 
 \subsubsection{Key, query, and value projections}
-As the model uses multi-headed attention, the keys, queries, and values matrices of dimension $\frac{D}{H}\times N$ are calculated by combining the biases $\beta_{\frac{D}{H} \times 1}$ with the projection matrices $\Omega_{\frac{D}{H}\times\frac{D}{H}}$. Calculating for one head, $3\frac{D}{H}N(2\frac{D}{H} + 1)$ FLOPS are required. This then results in a total of $3H\frac{D}{H}N(2\frac{D}{H} + 1)$ FLOPS.
+As the model uses multi-headed attention, the keys, queries, and values matrices of dimension $\frac{D}{H}\times N$ are calculated by combining the biases $\beta_{\frac{D}{H} \times 1}$ with the projection matrices $\Omega_{\frac{D}{H}\times\frac{D}{H}}$:
+\begin{equation}
+    V_h = \beta_{vh} 1^T + \Omega_{vh} X
+\end{equation}
+\begin{equation}
+    Q_h = \beta_{qh} 1^T + \Omega_{qh} X
+\end{equation}
+\begin{equation}
+    K_h = \beta_{kh} 1^T + \Omega_{kh} X
+\end{equation}
+
+Calculating for one head, $3\frac{D}{H}N(2\frac{D}{H} + 1)$ FLOPS are required. This then results in a total of $3H\frac{D}{H}N(2\frac{D}{H} + 1)$ FLOPS.
 
 \subsubsection{RMS Norm}
-The model uses RMS Norm layers to re-centre and re-scale the embeddings, applying it column-wise. It is defined as follows in Eq.~\ref{eq:rmsnorm}:
+The model uses RMS Norm layers to re-centre and re-scale the embeddings, applying it column-wise. It is defined as follows in Eq.~\ref{eq:rmsnorm} \citep{zhang2019rootmeansquarelayer}:
 
 \begin{equation}
     x'_i = \frac{x_i}{\sqrt{\epsilon + \frac{1}{D}\sum^D_{j=1}x_j^2}} \gamma_i,
@@ -109,24 +120,57 @@ The model uses RMS Norm layers to re-centre and re-scale the embeddings, applyin
 
 where $x_i$ is the $i^{th}$ column of the matrix, $\epsilon$ is a small constant to prevent division by zero, and $\gamma_i$ is the $i^{th}$ column of the scaling matrix. The calculation of the RMS requires $2DN + 10D$ FLOPS for the whole matrix, including squaring each element, summing them, multiplication by $\frac{1}{D}$, and finally the square root operation. Dividing the matrix by this as well as scaling and shifting by $\gamma_i$ and $\epsilon$ respectively costs an additional $3DN$ FLOPS, summing to cost $D(5N +10)$ FLOPS in total.
 
-\subsubsection{Softmax}
-The model also uses softmax to convert a vector of input logits into probabilities, defined in Eq.~\ref{eq:softmax}:
-
+\subsubsection{Self-attention}
+The self-attention for each head is calculated as in Eq.~\ref{eq:sa}:
 \begin{equation}
-    \mathrm{softmax}(x_i) = \frac{e^{x_i}}{\sum^N_{j=1} e^{x_j}},
+    \mathrm{Sa}_h[X] = V_h \cdot \mathrm{Softmax}\Big[\frac{K_h^TQ_h}{\sqrt{D/H}}\Big],
+    \label{eq:sa}
+\end{equation}
+where softmax acts on the matrix columns:
+\begin{equation}
+    \mathrm{Softmax}\Bigg[\Bigg(\begin{matrix}
+        z1\\
+        \vdots\\
+        z_N
+    \end{matrix}\Bigg)\Bigg] = \frac{e^{z_i}}{\sum^N_{j=1} e^{z_j}}.
     \label{eq:softmax}
 \end{equation}
-where $x_i$ is the $i^{th}$ element of the input vector. The cost of calculating softmax on an input matrix $X_{N \times N}$ is $N(12N - 1)$ FLOPS, as it requires $NN$ exponentiation operations, $N(N-1)$ summation operations, and $NN$ division operations.
+Assuming that $\sum^N_{j=1} e^{z_j}$ is calculated once per column, the cost of calculating softmax on an input matrix $X_{N \times N}$ is $N(12N - 1)$ FLOPS, as it requires $NN$ exponentiation operations, $N(N-1)$ summation operations, and $NN$ division operations. The self-attention FLOPS per head is then $\frac{D}{H}N(N-1) + N(12N - 1)$.
+
+\subsubsection{Multi-head self-attention output}
+The outputs from each head are concatenated and a final linear transformation is applied as seen in Eq.~\ref{eq:mhsa}:
+\begin{equation}
+    \mathrm{MhSa}(X) = \Omega_c[\mathrm{Sa}_1[X]^T, \ldots, \mathrm{Sa}_H[X]^T]^T,
+    \label{eq:mhsa}
+\end{equation}
+requiring $DN(D-1)$ FLOPS.
 
 \subsubsection{SwiGLU}
-The model also uses a SwiGLU activation layer, which consists of two matrix projections and a SiLU activation. With an input matrix $X_{D \times N}$, there are two independent projections: the gate projection matrix $G_{M \times D}=W_g X$ and the up projection matrix $U_{M \times D}=W_u X$, where $M=4864$ and is the intermmediate dimension of the model. The projections cost $2ND(2N-1)$ FLOPS.
+The model also uses a SwiGLU activation layer, which consists of two matrix projections and a SiLU activation \citep{shazeer2020gluvariantsimprovetransformer}. With an input matrix $X_{D \times N}$, there are two independent projections: the gate projection matrix $G_{M \times D}$ and the up projection matrix $U_{M \times D}$, where $M=4864$ and is the intermmediate dimension of the model.
+
+\begin{equation}
+    G = W_g X
+\end{equation}
+\begin{equation}
+    U = W_u X
+\end{equation}
+
+The projections cost $2ND(2N-1)$ FLOPS.
 
 The SiLU activation is then applied to $G$ elementwise, as defined in Eq.~\ref{eq:silu}:
 \begin{equation}
-    \mathrm{SiLU}(x_i) = x_i \cdot \mathrm{sigmoid}(x_i) = \frac{x_i}{1 + e^{-x_i}},
+    \mathrm{SiLU}(x_i) = x_i \cdot \sigma(x_i) = \frac{x_i}{1 + e^{-x_i}},
     \label{eq:silu}
 \end{equation}
-where $x_i$ is the $i^{th}$ element of the input vector. The cost of calculating the SiLU activation function is $13NM$ FLOPS, as it requires $NM$ multiplication operations, $N$ exponentiation operations, and $2N$ addition operations. Then there is element-wise multiplication of $A = \mathrm{SiLU}(G) \odot U$ as well as a down projection $B_{D \times N} = W_d A$, where $W_d$ is the down projection matrix. The down projection costs $2ND(2N-1)$ FLOPS, and the element-wise multiplication costs $2NM$ FLOPS.
+where $x_i$ is the $i^{th}$ element of the input vector. The cost of calculating the SiLU activation function is $13NM$ FLOPS, as it requires $NM$ multiplication operations, $N$ exponentiation operations, and $2N$ addition operations. 
+
+Then, element-wise multiplication of $L = \mathrm{SiLU}(G) \odot U$ as well as a down projection $O_{D \times N}$:
+
+\begin{equation}
+    O = W_d A
+\end{equation}
+
+where $W_d$ is the down projection matrix. The down projection costs $2ND(2N-1)$ FLOPS, and the element-wise multiplication costs $2NM$ FLOPS.
 
 In total, SwiGLU costs $2ND(2M + 2N -2) + 15NM$ FLOPS.
 
@@ -136,9 +180,9 @@ When applying LoRA, the forward pass of the LoRALinear layer combines the origin
     \mathrm{output} = \mathrm{original}(x) + \frac{\alpha}{r} \cdot (x \cdot A^T \cdot B^T),
     \label{eq:lora}
 \end{equation}
-where $r$ is the rank of the LoRA matrices, and $A$ and $B$ are the low-rank matrices added to the query and value projections, respectively. $\alpha$ is a scaling factor that controls the magnitude of the LoRA output's contribution to the update and is set to be equal to $r$ throughout.
+where $r$ is the rank of the LoRA matrices, and $A$ and $B$ are the low-rank matrices added to the query and value projections, respectively. $\alpha$ is a scaling factor that controls the magnitude of the LoRA output's contribution to the update and is set to be equal to $r$.
 
-Thus, the cost of computing and adding the output of the LoRA linear layer to the original matrix is $2(\frac{H}{D})^2r$, as the model uses multi-headed self-attention.
+Thus, the cost of computing and adding the output of the LoRA linear layer to the original matrix is $2(\frac{H}{D})^2r$ per head.
 
 \section{Preprocessing}
 \label{zero}
@@ -147,10 +191,9 @@ A text-based numeric encoding method adapted from the time series data preproces
 First, as the numeric values in the dataset may vary, to standardise the numeric range of the data and control the token length, a simple scaling was applied, as shown in Eq.~\ref{eq:scale}
 
 \begin{equation}
-    x'_t = \frac{x_t}{\alpha},
+    x'_t = \frac{x_t}{\alpha}.
     \label{eq:scale}
 \end{equation}
-where $\alpha$ is chosen based on the distribution of the dataset.
 
 The scaled numeric values were rounded to a fixed number of decimal places to ensure uniformity when tokenized.
 
@@ -171,12 +214,12 @@ where $P_t$ refers to the original prey value at time $t$ and $Q_t$ refers to th
 The code for this preprocessing is shown in Listing~\ref{lst:preprocess}.
 
 \begin{listing}[h]
-\inputminted[firstline=64, lastline=83]{python}{../src/preprocessor.py}
+\inputminted[firstline=60, lastline=79]{python}{../src/preprocessor.py}
 \caption{The function takes in the prey and predator values, the scaling factor $\alpha$, and the number of decimal places to round to. It returns the encoded string representation of the time series data.}
 \label{lst:preprocess}
 \end{listing}
 
-Throughout, $\alpha=5$ and the values were rounded to 3 decimal places. Two examples are shown below in Tables \ref{tab:example} and \ref{tab:example2}.
+Throughout, $\alpha=5$ and the values were rounded to 3 decimal places. Two examples are shown below in Tables~\ref{tab:example} and~\ref{tab:example2}.
 
 \begin{table}
     \centering
@@ -208,11 +251,11 @@ Throughout, $\alpha=5$ and the values were rounded to 3 decimal places. Two exam
 \clearpage
 \section{Baseline}
 \label{sec:baseline}
-Using the preprocessing method described in Section~\ref{zero}, the untrained model was evaluated on the tokenized Lotka-Volterra time series data. It was decided that the following plots and metrics hereafter would be using the scaled and rounded values of the time series data to compare to the predictions. This is the format that the model is trained upon and rescaling the data back to the original values would not be useful for evaluating the model's performance as it would introduce a source of error that the model cannot account for.
+Using the preprocessing method described in Section~\ref{zero}, the untrained model was evaluated on the tokenized Lotka-Volterra time series data. The following plots and metrics calculations are done using the scaled and rounded values of the time series data to compare to the predictions. This is the format that the model is trained upon and rescaling the data back to the original values would not be useful for evaluating the model's performance as it would introduce a source of error that the model cannot account for.
 
 To evaluate the performance of the untrained model, stratified sampling was used to select four systems from the given dataset. Broadly speaking, there are four types of system behaviour present in the dataset: oscillatory, decaying, growing, and stable. 
 
-The model was given the first 80 points in the time-series data and asked to predict the next 20 points, as shown in Fig.~\ref{fig:baseline_pred}. The model was evaluated using mean absolute error (MAE), the mean absolute percentage error (MAPE), the mean squared error (MSE), the root mean squared error (RMSE), and running mean squared error (RMSE) for both the predator and prey time series. The metrics for an example of each of these types are shown in Table~\ref{tab:baseline} and in Fig.~\ref{fig:baseline_rmse}.
+The model was given the first 80 points in the time-series data and asked to predict the next 20 points, as shown in Fig.~\ref{fig:baseline_pred}. The model was evaluated using mean absolute error (MAE), the mean absolute percentage error (MAPE), the mean squared error (MSE), the root mean squared error (RMSE), and running mean squared error (RMSE) for both time series. The metrics for an example of each of these types are shown in Table~\ref{tab:baseline} and in Fig.~\ref{fig:baseline_rmse}.
 
 \begin{figure}[h]
     \centering
@@ -418,10 +461,10 @@ Using the final hyperparameters, shown in Table~\ref{tab:lora_final_hyperparamet
         & \multicolumn{2}{c|}{506} & \multicolumn{2}{c|}{20} & \multicolumn{2}{c|}{654} & \multicolumn{2}{|c}{906} \\
         Metric & Prey & Predator & Prey & Predator & Prey & Predator & Prey & Predator \\
         \hline
-        MSE & 0.008 & 0.002 & 2.676 & 1.249 & 0.000 & 0.000 & 5.296 & 0.480 \\
-        RMSE & 0.087 & 0.048 & 1.636 & 1.118 & 0.017 & 0.001 & 2.301 & 0.693 \\
-        MAE & 0.068 & 0.042 & 1.031 & 0.671 & 0.016 & 0.001 & 1.303 & 0.480 \\
-        MAPE & 0.051 & 0.037 & 0.455 & 0.142 & 0.002 & 0.001 & 0.265 & 1.456 \\        
+        MSE & 0.004 & 0.001 & 2.013 & 2.121 & 0.000 & 0.000 & 6.177 & 0.739 \\
+        RMSE & 0.064 & 0.024 & 1.419 & 1.456 & 0.012 & 0.001 & 2.485 & 0.859 \\
+        MAE & 0.053 & 0.018 & 0.779 & 0.881 & 0.012 & 0.001 & 1.488 & 0.602 \\
+        MAPE & 0.041 & 0.015 & 0.232 & 0.231 & 0.002 & 0.001 & 0.325 & 1.887 \\    
     \end{tabular}
     \caption{Metrics for the model fine-tuned with LoRA using the final best hyperparameters on a subset from the test set.}
     \label{tab:lora_final_metrics}
@@ -451,12 +494,12 @@ The FLOPS used for every experiment are shown in Table~\ref{tab:flops_track}. As
         Stage & Training & Validation & Inference & Total \\
         \hline
         Untrained & -- & -- & 5.416e+12 & 5.416e+12 \\
-        Default hyperparameters & 1.214e+16 & 1.618e+14 & 5.046e+12 & 1.230e+16 \\
-        $\eta$ \& $r$ tuning & 8.191e+15 & 1.092e+14 & -- & 8.300e+15 \\
-        Context length tuning & 2.528e+15 & 3.370e+13 & -- & 2.561e+15 \\
-        Final run & 7.456e+16 & 9.942e+14 & 5.047e+12 & 7.556e+16 \\
+        Default hyperparameters & 9.812e+15 & 1.308e+14 & 5.416e+12 & 9.948e+15 \\
+        $\eta$ \& $r$ tuning & 8.831e+15 & 1.177e+14 & -- & 8.948e+15 \\
+        Context length tuning & 2.723e+15 & 3.631e+13 & -- & 2.759e+15 \\
+        Final run & 9.812e+15 & 1.308e+14 & 5.416e+12 & 9.948e+15 \\
         \hline
-        Total & 9.742e+16 & 1.299e+15 & 1.551e+13 & 9.873e+16 \\
+        Total & 9.659e+16 & 1.288e+15 & 1.625e+13 & 9.790e+16 \\
     \end{tabular}
     \caption{FLOPS usage for each stage of the coursework including inference by the untrained model; training and inference of the LoRA adapted model with default hyperparameters; grid search of $\eta$, LoRA rank, and context length; and the training and inference of the final model.}
     \label{tab:flops_track}

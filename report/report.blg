@@ -8,47 +8,51 @@ Warning--empty author and editor in gruver2024largelanguagemodelszeroshot
 Warning--missing publisher in gruver2024largelanguagemodelszeroshot
 Warning--empty author and editor in hu2021loralowrankadaptationlarge
 Warning--missing publisher in hu2021loralowrankadaptationlarge
+Warning--empty author and editor in shazeer2020gluvariantsimprovetransformer
+Warning--missing publisher in shazeer2020gluvariantsimprovetransformer
 Warning--empty author and editor in yang2024qwen2technicalreport
 Warning--missing publisher in yang2024qwen2technicalreport
-You've used 3 entries,
+Warning--empty author and editor in zhang2019rootmeansquarelayer
+Warning--missing publisher in zhang2019rootmeansquarelayer
+You've used 5 entries,
             3142 wiz_defined-function locations,
-            686 strings with 6496 characters,
-and the built_in function-call counts, 14429 in all, are:
-= -- 1598
-> -- 223
-< -- 0
-+ -- 111
-- -- 92
-* -- 1490
-:= -- 1718
-add.period$ -- 6
-call.type$ -- 3
-change.case$ -- 86
-chr.to.int$ -- 3
-cite$ -- 9
-duplicate$ -- 349
-empty$ -- 1371
-format.name$ -- 98
-if$ -- 3127
+            696 strings with 6744 characters,
+and the built_in function-call counts, 15970 in all, are:
+= -- 1758
+> -- 243
+< -- 2
++ -- 120
+- -- 98
+* -- 1617
+:= -- 1927
+add.period$ -- 10
+call.type$ -- 5
+change.case$ -- 97
+chr.to.int$ -- 5
+cite$ -- 15
+duplicate$ -- 464
+empty$ -- 1513
+format.name$ -- 109
+if$ -- 3454
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 33
-newline$ -- 18
-num.names$ -- 9
-pop$ -- 140
+missing$ -- 46
+newline$ -- 26
+num.names$ -- 15
+pop$ -- 174
 preamble$ -- 1
-purify$ -- 86
+purify$ -- 97
 quote$ -- 0
-skip$ -- 77
+skip$ -- 113
 stack$ -- 0
-substring$ -- 3609
-swap$ -- 69
+substring$ -- 3805
+swap$ -- 98
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 27
-warning$ -- 6
-while$ -- 30
+type$ -- 45
+warning$ -- 10
+while$ -- 41
 width$ -- 0
-write$ -- 38
-(There were 6 warnings)
+write$ -- 60
+(There were 10 warnings)

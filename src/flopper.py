@@ -2,6 +2,21 @@ import argparse
 
 class Flopper:
     def __init__(self, sequence_length, model=None, num_steps_training=None, batch_size=None, use_lora=False, lora_rank=None):
+        """
+        Initialise Flopper object with model parameters.
+        
+        Args:
+            sequence_length (int): Length of the input sequence.
+            model (str): Model name or path.
+            num_steps_training (int): Number of training steps.
+            batch_size (int): Batch size.
+            use_lora (bool): Use LoRA.
+            lora_rank (int): LoRA rank.
+
+        Returns:
+            None
+        """
+        
         self.sequence_length = sequence_length
 
         if model ==  None:
@@ -37,19 +52,50 @@ class Flopper:
         
 
     def __str__(self):
-        return f"{self.total_flops:.4e}"
+        """
+        Format the FLOPs output for printing.
+        """
+        return f"{self.total_flops:.3e}"
     
     def matrix_multiplication(self, m, n, p, bias=False):
+        """
+        Calculate FLOPs for matrix multiplication.
+        
+        Args:
+            m (int): Number of rows in the first matrix.
+            n (int): Number of columns in the first matrix and rows in the second matrix.
+            p (int): Number of columns in the second matrix.
+            bias (bool): Whether to include bias in the calculation.
+        Returns:
+            flops (int): FLOPs for matrix multiplication.
+        """
         flops = m*p*(2*n-1)
         if bias:
             flops += m*p
         return flops
     
     def embedding(self):
+        """
+        Calculate FLOPS for embedding layer.
+        
+        Args:
+            None
+        Returns:
+            flops (int): FLOPs for embedding layer.
+        """
         flops = self.matrix_multiplication(self.hidden_size, self.vocab_size, self.sequence_length, bias=False)
         return flops
     
     def rms_layernorm(self, m, n):
+        """
+        Calculate FLOPS for RMS layer normalization.
+        
+        Args:
+            m (int): Number of rows (hidden size).
+            n (int): Number of columns (sequence length).
+        Returns:
+            flops (int): FLOPs for RMS layer normalization.
+        """
         #self.hidden_size, self.sequence_length
             
         # Compute the RMS:
@@ -68,6 +114,14 @@ class Flopper:
         return flops
     
     def softmax(self, m):
+        """
+        Calculate FLOPS for softmax function.
+        
+        Args:
+            m (int): Number of rows and columns (sequence length).
+        Returns:
+            flops (int): FLOPs for softmax function.
+        """
         #self.sequence_length
         # seq(seq*10 + seq*1 + seq-1)
 
@@ -80,23 +134,58 @@ class Flopper:
         return flops
     
     def silu(self, m, n):
+        """
+        Calculate FLOPS for SiLU activation function.
+        
+        Args:
+            m (int): Number of rows (intermediate size).
+            n (int): Number of columns (sequence length).
+        Returns:
+            flops (int): FLOPs for SiLU activation function.
+        """
         #self.ffw_size, self.sequence_length
         #calculating sigmoid
         flops = 13*n*m      #exp + addition + multiplication + division
         return flops
 
     def rope(self, m, n):
+        """
+        Calculate FLOPS for rotary positional embedding.
+        
+        Args:
+            m (int): Number of rows (hidden size).
+            n (int): Number of columns (sequence length).
+        Returns:
+            flops (int): FLOPs for rotary positional embedding.
+        """
         #self.hidden_size, self.sequence_length
         #cost of adding rotary positional embeddings
         flops = m*n
         return flops
 
     def lora(self, m, r):
-        #self.head_dim, self.sequence_length
+        """
+        Calculate FLOPS for adding LoRA matrices.
+        
+        Args:
+            m (int): Number of rows (hidden size).
+            r (int): LoRA rank.
+        Returns:
+            flops (int): FLOPs for LoRA matrices.
+        """
+        #self.head_dim, self.lora_rank
         flops = m*m*2*r
         return flops
     
     def multi_head_attention(self):
+        """
+        Calculate the FLOPS for multi-head attention.
+
+        Args:
+            None
+        Returns:
+            flops (int): FLOPs for multi-head attention.
+        """
         # qkv multiplications
         if self.use_lora == False:
             flops = 3 * self.matrix_multiplication(self.sequence_length, self.hidden_size, self.head_dim, bias=True)
@@ -118,6 +207,14 @@ class Flopper:
         return flops
 
     def ffd(self):
+        """
+        Calculate FLOPS for feed-forward multi-layer perceptron.
+
+        Args:
+            None
+        Returns:
+            flops (int): FLOPS for the feed-forward MLP.
+        """
         # rms layer norm
         flops = self.rms_layernorm(self.hidden_size, self.sequence_length)
         # multi head attention
@@ -139,6 +236,15 @@ class Flopper:
         return flops
     
     def forward_pass(self, new_batch_size=None):
+        """
+        Calculates FLOPS for single forward pass. Can also be adapted for calculating the backward pass.
+
+        Args:
+            new_batch_size (int): batch size when computing FLOPS for backpropagation.
+
+        Returns:
+            flops (int): FLOPS for single pass.
+        """
         #forward pass
         if new_batch_size is not None:
             batch_size = new_batch_size
@@ -157,20 +263,52 @@ class Flopper:
         return flops
 
     def forward_and_back(self):
+        """
+        Calculates FLOPS for forward and backward pass.
+
+        Args:
+            None
+        Returns:
+            flops (int): total FLOPS for forward and backward pass.
+        """
         # backpropagation is assumed to be twice the forward pass
         return self.forward_pass() + 2*self.forward_pass(new_batch_size=1)
     
     def compute_flops(self):
+        """
+        Calculates total FLOPS when training.
+
+        Args:
+            None
+        Returns:
+            total_flops (int): total FLOPS when training.
+        """
         # forward and backpropagation is computed for every training step
         self.total_flops = self.num_steps_training*self.forward_and_back()
         return self.total_flops
 
     def compute_validation(self):
+        """
+        Calculates total FLOPS when model is calculating validation loss.
+
+        Args:
+            None
+        Returns:
+            total_flops (int): total FLOPS when calculating validation loss.
+        """
         # when computing validation loss, model only goes through the forward pass
         self.total_flops = self.forward_pass()
         return self.total_flops
     
     def compute_inference(self):
+        """
+        Calculates total FLOPS when model is in inference mode to predict one sequence.
+
+        Args:
+            None
+        Returns:
+            total_flops (int): total FLOPS when in inference mode.
+        """
         # when in inference mode, the model is only passed one sequence at a times
         self.sequence_length = 1200 # one full sequence has a maximum of around 1200 tokens
         self.total_flops = self.forward_pass(new_batch_size=1)
