@@ -166,6 +166,10 @@ class Flopper:
         self.total_flops = self.forward_pass()
         return self.total_flops
     
+    def compute_inference(self):
+        self.total_flops = self.forward_pass(new_batch_size=1)
+        return self.total_flops
+    
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Compute FLOPs for a specified Qwen model")

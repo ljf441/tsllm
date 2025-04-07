@@ -43,12 +43,12 @@ lora_alpha = lora_rank
 batch_size = 4
 learning_rate = 1e-4
 test_size = 0.2
-max_steps = 16000
+max_steps = 15000
 max_ctx_length = 768
 points = 80
 # T_max = max_steps
 
-run_name = "CSD3_16k_seed_defaults_best"
+run_name = "CSD3_15k_seed_defaults_best"
 
 np.random.seed(442)
 # wandb.init(project="lora_qwen", config={

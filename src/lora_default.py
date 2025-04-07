@@ -43,12 +43,12 @@ lora_alpha = lora_rank
 batch_size = 4
 learning_rate = 1e-5
 test_size = 0.2
-max_steps = 4000
+max_steps = 3000
 max_ctx_length = 512
 points = 80
 # T_max = max_steps
 
-run_name = "CSD3_4k_default_best"
+run_name = "CSD3_3k_default_best"
 
 np.random.seed(442)
 
