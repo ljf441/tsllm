@@ -11,104 +11,116 @@
 \@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Standardised FLOPS for common primitive operations as defined for the rest of this report.}}{1}{table.1}\protected@file@percent }
 \newlabel{tab:flops_primitives}{{1}{1}{Standardised FLOPS for common primitive operations as defined for the rest of this report}{table.1}{}}
 \newlabel{tab:flops_primitives@cref}{{[table][1][]1}{[1][1][]1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}FLOPS calculations}{1}{subsection.2.1}\protected@file@percent }
+\newlabel{sec:flops_calc}{{2.1}{1}{FLOPS calculations}{subsection.2.1}{}}
+\newlabel{sec:flops_calc@cref}{{[subsection][1][2]2.1}{[1][1][]1}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.1}RoPE}{2}{subsubsection.2.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.2}Key, query, and value projections}{2}{subsubsection.2.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.3}RMS Norm}{2}{subsubsection.2.1.3}\protected@file@percent }
+\newlabel{eq:rmsnorm}{{1}{2}{RMS Norm}{equation.2.1}{}}
+\newlabel{eq:rmsnorm@cref}{{[equation][1][]1}{[1][2][]2}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.4}Softmax}{2}{subsubsection.2.1.4}\protected@file@percent }
+\newlabel{eq:softmax}{{2}{2}{Softmax}{equation.2.2}{}}
+\newlabel{eq:softmax@cref}{{[equation][2][]2}{[1][2][]2}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.5}SwiGLU}{2}{subsubsection.2.1.5}\protected@file@percent }
 \citation{gruver2024largelanguagemodelszeroshot}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Extrapolated FLOPS for operations done whilst training and validating the LLM with LoRA.}}{2}{table.2}\protected@file@percent }
-\newlabel{tab:flops_advanced}{{2}{2}{Extrapolated FLOPS for operations done whilst training and validating the LLM with LoRA}{table.2}{}}
-\newlabel{tab:flops_advanced@cref}{{[table][2][]2}{[1][1][]2}}
-\@writefile{toc}{\contentsline {section}{\numberline {3}Preprocessing}{2}{section.3}\protected@file@percent }
-\newlabel{zero}{{3}{2}{Preprocessing}{section.3}{}}
-\newlabel{zero@cref}{{[section][3][]3}{[1][2][]2}}
-\newlabel{eq:scale}{{1}{2}{Preprocessing}{equation.3.1}{}}
-\newlabel{eq:scale@cref}{{[equation][1][]1}{[1][2][]2}}
-\newlabel{eq:encode}{{2}{2}{Preprocessing}{equation.3.2}{}}
-\newlabel{eq:encode@cref}{{[equation][2][]2}{[1][2][]2}}
-\@writefile{lol}{\contentsline {listing}{\numberline {1}{\ignorespaces Function to preprocess the time series data. The function takes in the prey and predator values, the scaling factor $\alpha $, and the number of decimal places to round to. It returns the encoded string representation of the time series data.}}{3}{listing.1}\protected@file@percent }
-\newlabel{lst:preprocess}{{1}{3}{Preprocessing}{listing.1}{}}
-\newlabel{lst:preprocess@cref}{{[listing][1][]1}{[1][2][]3}}
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Example of the preprocessing method for two steps in the time series data. The raw data is scaled, encoded, and then tokenized.}}{4}{table.3}\protected@file@percent }
-\newlabel{tab:example}{{3}{4}{Example of the preprocessing method for two steps in the time series data. The raw data is scaled, encoded, and then tokenized}{table.3}{}}
-\newlabel{tab:example@cref}{{[table][3][]3}{[1][3][]4}}
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Another example of the preprocessing method for two steps in the time series data.}}{4}{table.4}\protected@file@percent }
-\newlabel{tab:example2}{{4}{4}{Another example of the preprocessing method for two steps in the time series data}{table.4}{}}
-\newlabel{tab:example2@cref}{{[table][4][]4}{[1][3][]4}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Baseline}{5}{section.4}\protected@file@percent }
-\newlabel{sec:baseline}{{4}{5}{Baseline}{section.4}{}}
-\newlabel{sec:baseline@cref}{{[section][4][]4}{[1][5][]5}}
-\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Metrics for the untrained Qwen2.5-0.5B-Instruct model performance on a subset of the test set. The metrics are calculated for the 20 points comprising the out-of-distribution data only.}}{5}{table.5}\protected@file@percent }
-\newlabel{tab:baseline}{{5}{5}{Metrics for the untrained Qwen2.5-0.5B-Instruct model performance on a subset of the test set. The metrics are calculated for the 20 points comprising the out-of-distribution data only}{table.5}{}}
-\newlabel{tab:baseline@cref}{{[table][5][]5}{[1][5][]5}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Predictions of the untrained Qwen2.5-0.5B-Instruct model on a subset of the Lotka-Volterra time series data for both predator (purple) and prey (gold). The model's predictions are shown in the dashed lines, while the true values are shown in the solid lines.}}{7}{figure.1}\protected@file@percent }
-\newlabel{fig:baseline_pred}{{1}{7}{Predictions of the untrained Qwen2.5-0.5B-Instruct model on a subset of the Lotka-Volterra time series data for both predator (purple) and prey (gold). The model's predictions are shown in the dashed lines, while the true values are shown in the solid lines}{figure.1}{}}
-\newlabel{fig:baseline_pred@cref}{{[figure][1][]1}{[1][5][]7}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Running mean squared error (RMSE) for the untrained Qwen2.5-0.5B-Instruct model on a subset of the test set over the out-of-distribution data for the predator (purple) and prey (gold) time series.}}{8}{figure.2}\protected@file@percent }
-\newlabel{fig:baseline_rmse}{{2}{8}{Running mean squared error (RMSE) for the untrained Qwen2.5-0.5B-Instruct model on a subset of the test set over the out-of-distribution data for the predator (purple) and prey (gold) time series}{figure.2}{}}
-\newlabel{fig:baseline_rmse@cref}{{[figure][2][]2}{[1][5][]8}}
+\newlabel{eq:silu}{{3}{3}{SwiGLU}{equation.2.3}{}}
+\newlabel{eq:silu@cref}{{[equation][3][]3}{[1][3][]3}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.6}LoRA linear layer}{3}{subsubsection.2.1.6}\protected@file@percent }
+\newlabel{eq:lora}{{4}{3}{LoRA linear layer}{equation.2.4}{}}
+\newlabel{eq:lora@cref}{{[equation][4][]4}{[1][3][]3}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Preprocessing}{3}{section.3}\protected@file@percent }
+\newlabel{zero}{{3}{3}{Preprocessing}{section.3}{}}
+\newlabel{zero@cref}{{[section][3][]3}{[1][3][]3}}
+\newlabel{eq:scale}{{5}{3}{Preprocessing}{equation.3.5}{}}
+\newlabel{eq:scale@cref}{{[equation][5][]5}{[1][3][]3}}
+\newlabel{eq:encode}{{6}{4}{Preprocessing}{equation.3.6}{}}
+\newlabel{eq:encode@cref}{{[equation][6][]6}{[1][3][]4}}
+\@writefile{lol}{\contentsline {listing}{\numberline {1}{\ignorespaces The function takes in the prey and predator values, the scaling factor $\alpha $, and the number of decimal places to round to. It returns the encoded string representation of the time series data.}}{4}{listing.1}\protected@file@percent }
+\newlabel{lst:preprocess}{{1}{4}{Preprocessing}{listing.1}{}}
+\newlabel{lst:preprocess@cref}{{[listing][1][]1}{[1][4][]4}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Example of the preprocessing method for two steps in the time series data. The raw data is scaled, encoded, and then tokenized.}}{5}{table.2}\protected@file@percent }
+\newlabel{tab:example}{{2}{5}{Example of the preprocessing method for two steps in the time series data. The raw data is scaled, encoded, and then tokenized}{table.2}{}}
+\newlabel{tab:example@cref}{{[table][2][]2}{[1][4][]5}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Another example of the preprocessing method for two steps in the time series data.}}{5}{table.3}\protected@file@percent }
+\newlabel{tab:example2}{{3}{5}{Another example of the preprocessing method for two steps in the time series data}{table.3}{}}
+\newlabel{tab:example2@cref}{{[table][3][]3}{[1][4][]5}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Baseline}{6}{section.4}\protected@file@percent }
+\newlabel{sec:baseline}{{4}{6}{Baseline}{section.4}{}}
+\newlabel{sec:baseline@cref}{{[section][4][]4}{[1][6][]6}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Metrics for the untrained model performance on a subset of the test set.}}{6}{table.4}\protected@file@percent }
+\newlabel{tab:baseline}{{4}{6}{Metrics for the untrained model performance on a subset of the test set}{table.4}{}}
+\newlabel{tab:baseline@cref}{{[table][4][]4}{[1][6][]6}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Predictions (dashed) of the untrained model compared with the true (solid) values on a subset of the dataset for both predator (purple) and prey (gold).}}{8}{figure.1}\protected@file@percent }
+\newlabel{fig:baseline_pred}{{1}{8}{Predictions (dashed) of the untrained model compared with the true (solid) values on a subset of the dataset for both predator (purple) and prey (gold)}{figure.1}{}}
+\newlabel{fig:baseline_pred@cref}{{[figure][1][]1}{[1][6][]8}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Running mean squared error (RMSE) for the model on a subset of the test set over the out-of-distribution data for the predator (purple) and prey (gold) time series.}}{9}{figure.2}\protected@file@percent }
+\newlabel{fig:baseline_rmse}{{2}{9}{Running mean squared error (RMSE) for the model on a subset of the test set over the out-of-distribution data for the predator (purple) and prey (gold) time series}{figure.2}{}}
+\newlabel{fig:baseline_rmse@cref}{{[figure][2][]2}{[1][6][]9}}
 \citation{hu2021loralowrankadaptationlarge}
-\@writefile{toc}{\contentsline {section}{\numberline {5}LoRA}{9}{section.5}\protected@file@percent }
-\newlabel{sec:lora}{{5}{9}{LoRA}{section.5}{}}
-\newlabel{sec:lora@cref}{{[section][5][]5}{[1][9][]9}}
-\newlabel{eq:lora}{{3}{9}{LoRA}{equation.5.3}{}}
-\newlabel{eq:lora@cref}{{[equation][3][]3}{[1][9][]9}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Training with LoRA}{9}{subsection.5.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Default hyperparameters used for training the Qwen2.5-0.5B-Instruct model with LoRA on the Lotka-Volterra time series data.}}{9}{table.6}\protected@file@percent }
-\newlabel{tab:lora_default}{{6}{9}{Default hyperparameters used for training the Qwen2.5-0.5B-Instruct model with LoRA on the Lotka-Volterra time series data}{table.6}{}}
-\newlabel{tab:lora_default@cref}{{[table][6][]6}{[1][9][]9}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Training and validation loss for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra time series data using default hyperparameters. The bottom figure compares the training (blue) and validation (red) loss using the same resolution of every 50 steps whilst the top figure shows the training loss at every step and the middle figure shows the validation loss at every 50th step.}}{10}{figure.3}\protected@file@percent }
-\newlabel{fig:lora_default_loss}{{3}{10}{Training and validation loss for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra time series data using default hyperparameters. The bottom figure compares the training (blue) and validation (red) loss using the same resolution of every 50 steps whilst the top figure shows the training loss at every step and the middle figure shows the validation loss at every 50th step}{figure.3}{}}
-\newlabel{fig:lora_default_loss@cref}{{[figure][3][]3}{[1][9][]10}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Predictions of the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA using default hyperparameters on a subset of the test set for both predator (purple) and prey (gold). The model's predictions are shown in the dashed lines, while the true values are shown in the solid lines.}}{11}{figure.4}\protected@file@percent }
-\newlabel{fig:lora_default_pred}{{4}{11}{Predictions of the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA using default hyperparameters on a subset of the test set for both predator (purple) and prey (gold). The model's predictions are shown in the dashed lines, while the true values are shown in the solid lines}{figure.4}{}}
-\newlabel{fig:lora_default_pred@cref}{{[figure][4][]4}{[1][9][]11}}
-\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Metrics for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA using default hyperparameters on a subset of the test set. The metrics are calculated for the 20 points comprising the out-of-distribution data only.}}{12}{table.7}\protected@file@percent }
-\newlabel{tab:lora_default_metrics}{{7}{12}{Metrics for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA using default hyperparameters on a subset of the test set. The metrics are calculated for the 20 points comprising the out-of-distribution data only}{table.7}{}}
-\newlabel{tab:lora_default_metrics@cref}{{[table][7][]7}{[1][12][]12}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Hyperparameter tuning}{12}{subsection.5.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Hyperparameters tuned for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra time series data.}}{13}{table.8}\protected@file@percent }
-\newlabel{tab:lora_tuning}{{8}{13}{Hyperparameters tuned for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra time series data}{table.8}{}}
-\newlabel{tab:lora_tuning@cref}{{[table][8][]8}{[1][12][]13}}
-\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces Final validation loss for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra time series data using different combinations of $\eta $ and $r$.}}{13}{table.9}\protected@file@percent }
-\newlabel{tab:lora_lr_rank}{{9}{13}{Final validation loss for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra time series data using different combinations of $\eta $ and $r$}{table.9}{}}
-\newlabel{tab:lora_lr_rank@cref}{{[table][9][]9}{[1][13][]13}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.1}Learning rate and LoRA rank}{13}{subsubsection.5.2.1}\protected@file@percent }
-\newlabel{sec:lora_lr}{{5.2.1}{13}{Learning rate and LoRA rank}{subsubsection.5.2.1}{}}
-\newlabel{sec:lora_lr@cref}{{[subsubsection][1][5,2]5.2.1}{[1][12][]13}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Training (top) and validation (bottom) loss for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra time series data using different $\eta $ and $r$.}}{14}{figure.5}\protected@file@percent }
-\newlabel{fig:lora_lr_rank_loss}{{5}{14}{Training (top) and validation (bottom) loss for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra time series data using different $\eta $ and $r$}{figure.5}{}}
-\newlabel{fig:lora_lr_rank_loss@cref}{{[figure][5][]5}{[1][12][]14}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.2}Maximum context length}{15}{subsubsection.5.2.2}\protected@file@percent }
-\newlabel{sec:max_ctx}{{5.2.2}{15}{Maximum context length}{subsubsection.5.2.2}{}}
-\newlabel{sec:max_ctx@cref}{{[subsubsection][2][5,2]5.2.2}{[1][15][]15}}
-\@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces Final validation loss for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra time series data using different maximum context lengths with $\eta =0.0001$ and $r=8$.}}{15}{table.10}\protected@file@percent }
-\newlabel{tab:lora_max_context}{{10}{15}{Final validation loss for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra time series data using different maximum context lengths with $\eta =0.0001$ and $r=8$}{table.10}{}}
-\newlabel{tab:lora_max_context@cref}{{[table][10][]10}{[1][15][]15}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Training (top) and validation (bottom) loss for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra time series data using different maximum context lengths with $\eta =0.0001$ and $r=8$.}}{16}{figure.6}\protected@file@percent }
-\newlabel{fig:lora_max_context_loss}{{6}{16}{Training (top) and validation (bottom) loss for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra time series data using different maximum context lengths with $\eta =0.0001$ and $r=8$}{figure.6}{}}
-\newlabel{fig:lora_max_context_loss@cref}{{[figure][6][]6}{[1][15][]16}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Final model}{17}{subsection.5.3}\protected@file@percent }
-\newlabel{sec:final_model}{{5.3}{17}{Final model}{subsection.5.3}{}}
-\newlabel{sec:final_model@cref}{{[subsection][3][5]5.3}{[1][17][]17}}
-\@writefile{lot}{\contentsline {table}{\numberline {11}{\ignorespaces Final best hyperparameters for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra time series data.}}{17}{table.11}\protected@file@percent }
-\newlabel{tab:lora_final_hyperparameters}{{11}{17}{Final best hyperparameters for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra time series data}{table.11}{}}
-\newlabel{tab:lora_final_hyperparameters@cref}{{[table][11][]11}{[1][17][]17}}
-\@writefile{lot}{\contentsline {table}{\numberline {12}{\ignorespaces Metrics for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA using the final best hyperparameters on a subset from the test set. The metrics are calculated for the 20 points comprising the out-of-distribution data only.}}{17}{table.12}\protected@file@percent }
-\newlabel{tab:lora_final_metrics}{{12}{17}{Metrics for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA using the final best hyperparameters on a subset from the test set. The metrics are calculated for the 20 points comprising the out-of-distribution data only}{table.12}{}}
-\newlabel{tab:lora_final_metrics@cref}{{[table][12][]12}{[1][17][]17}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Training (top) and validation (middle) loss for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra dataset using the final best hyperparameters. The bottom figure directly compares the training (blue) and validation (red) loss using the same resolution of every 50 steps.}}{18}{figure.7}\protected@file@percent }
-\newlabel{fig:lora_final_loss}{{7}{18}{Training (top) and validation (middle) loss for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA on the Lotka-Volterra dataset using the final best hyperparameters. The bottom figure directly compares the training (blue) and validation (red) loss using the same resolution of every 50 steps}{figure.7}{}}
-\newlabel{fig:lora_final_loss@cref}{{[figure][7][]7}{[1][17][]18}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Predictions of the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA using the final best hyperparameters on a subset of the test set for both predator (purple) and prey (gold). The model's predictions are shown in the dashed lines, while the true values are shown in the solid lines.}}{19}{figure.8}\protected@file@percent }
-\newlabel{fig:lora_final_pred}{{8}{19}{Predictions of the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA using the final best hyperparameters on a subset of the test set for both predator (purple) and prey (gold). The model's predictions are shown in the dashed lines, while the true values are shown in the solid lines}{figure.8}{}}
-\newlabel{fig:lora_final_pred@cref}{{[figure][8][]8}{[1][17][]19}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Running mean squared error (RMSE) for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA using the final best hyperparameters on a subset of the test set over the out-of-distribution data for the predator (purple) and prey (gold) time series.}}{20}{figure.9}\protected@file@percent }
-\newlabel{fig:lora_final_rmse}{{9}{20}{Running mean squared error (RMSE) for the Qwen2.5-0.5B-Instruct model fine-tuned with LoRA using the final best hyperparameters on a subset of the test set over the out-of-distribution data for the predator (purple) and prey (gold) time series}{figure.9}{}}
-\newlabel{fig:lora_final_rmse@cref}{{[figure][9][]9}{[1][17][]20}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}FLOPS usage}{21}{section.6}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {13}{\ignorespaces FLOPS usage for each stage of the coursework including inference by the untrained model; training and inference of the LoRA adapted model with default hyperparameters; grid search of $\eta $, LoRA rank, and context length; and the training and inference of the final model.}}{21}{table.13}\protected@file@percent }
-\newlabel{tab:flops_track}{{13}{21}{FLOPS usage for each stage of the coursework including inference by the untrained model; training and inference of the LoRA adapted model with default hyperparameters; grid search of $\eta $, LoRA rank, and context length; and the training and inference of the final model}{table.13}{}}
-\newlabel{tab:flops_track@cref}{{[table][13][]13}{[1][21][]21}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}LoRA}{10}{section.5}\protected@file@percent }
+\newlabel{sec:lora}{{5}{10}{LoRA}{section.5}{}}
+\newlabel{sec:lora@cref}{{[section][5][]5}{[1][10][]10}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Training with LoRA}{10}{subsection.5.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Default hyperparameters used for training the model with LoRA on the dataset.}}{10}{table.5}\protected@file@percent }
+\newlabel{tab:lora_default}{{5}{10}{Default hyperparameters used for training the model with LoRA on the dataset}{table.5}{}}
+\newlabel{tab:lora_default@cref}{{[table][5][]5}{[1][10][]10}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Training and validation loss for the model fine-tuned with LoRA on the dataset using default hyperparameters. The bottom figure compares the training (blue) and validation (red) loss using the same resolution of every 50 steps.}}{11}{figure.3}\protected@file@percent }
+\newlabel{fig:lora_default_loss}{{3}{11}{Training and validation loss for the model fine-tuned with LoRA on the dataset using default hyperparameters. The bottom figure compares the training (blue) and validation (red) loss using the same resolution of every 50 steps}{figure.3}{}}
+\newlabel{fig:lora_default_loss@cref}{{[figure][3][]3}{[1][10][]11}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Predictions (dashed) of the model fine-tuned with LoRA using default hyperparameters compared with the true (solid) values on a subset of the test set for both predator (purple) and prey (gold).}}{12}{figure.4}\protected@file@percent }
+\newlabel{fig:lora_default_pred}{{4}{12}{Predictions (dashed) of the model fine-tuned with LoRA using default hyperparameters compared with the true (solid) values on a subset of the test set for both predator (purple) and prey (gold)}{figure.4}{}}
+\newlabel{fig:lora_default_pred@cref}{{[figure][4][]4}{[1][10][]12}}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Metrics for the model fine-tuned with LoRA using default hyperparameters on a subset of the test set.}}{13}{table.6}\protected@file@percent }
+\newlabel{tab:lora_default_metrics}{{6}{13}{Metrics for the model fine-tuned with LoRA using default hyperparameters on a subset of the test set}{table.6}{}}
+\newlabel{tab:lora_default_metrics@cref}{{[table][6][]6}{[1][13][]13}}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Hyperparameters tuned for the model fine-tuned with LoRA on the dataset.}}{13}{table.7}\protected@file@percent }
+\newlabel{tab:lora_tuning}{{7}{13}{Hyperparameters tuned for the model fine-tuned with LoRA on the dataset}{table.7}{}}
+\newlabel{tab:lora_tuning@cref}{{[table][7][]7}{[1][13][]13}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Hyperparameter tuning}{13}{subsection.5.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Final validation loss for the model fine-tuned with LoRA on the dataset using different combinations of $\eta $ and $r$.}}{14}{table.8}\protected@file@percent }
+\newlabel{tab:lora_lr_rank}{{8}{14}{Final validation loss for the model fine-tuned with LoRA on the dataset using different combinations of $\eta $ and $r$}{table.8}{}}
+\newlabel{tab:lora_lr_rank@cref}{{[table][8][]8}{[1][14][]14}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.1}Learning rate and LoRA rank}{14}{subsubsection.5.2.1}\protected@file@percent }
+\newlabel{sec:lora_lr}{{5.2.1}{14}{Learning rate and LoRA rank}{subsubsection.5.2.1}{}}
+\newlabel{sec:lora_lr@cref}{{[subsubsection][1][5,2]5.2.1}{[1][13][]14}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Training (top) and validation (bottom) loss for the model fine-tuned with LoRA on the dataset using different $\eta $ and $r$.}}{15}{figure.5}\protected@file@percent }
+\newlabel{fig:lora_lr_rank_loss}{{5}{15}{Training (top) and validation (bottom) loss for the model fine-tuned with LoRA on the dataset using different $\eta $ and $r$}{figure.5}{}}
+\newlabel{fig:lora_lr_rank_loss@cref}{{[figure][5][]5}{[1][13][]15}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.2}Maximum context length}{16}{subsubsection.5.2.2}\protected@file@percent }
+\newlabel{sec:max_ctx}{{5.2.2}{16}{Maximum context length}{subsubsection.5.2.2}{}}
+\newlabel{sec:max_ctx@cref}{{[subsubsection][2][5,2]5.2.2}{[1][16][]16}}
+\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces Final validation loss for the model fine-tuned with LoRA on the dataset using different maximum context lengths with $\eta =0.0001$ and $r=8$.}}{16}{table.9}\protected@file@percent }
+\newlabel{tab:lora_max_context}{{9}{16}{Final validation loss for the model fine-tuned with LoRA on the dataset using different maximum context lengths with $\eta =0.0001$ and $r=8$}{table.9}{}}
+\newlabel{tab:lora_max_context@cref}{{[table][9][]9}{[1][16][]16}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Training (top) and validation (bottom) loss for the model fine-tuned with LoRA on the dataset using different maximum context lengths with $\eta =0.0001$ and $r=8$.}}{17}{figure.6}\protected@file@percent }
+\newlabel{fig:lora_max_context_loss}{{6}{17}{Training (top) and validation (bottom) loss for the model fine-tuned with LoRA on the dataset using different maximum context lengths with $\eta =0.0001$ and $r=8$}{figure.6}{}}
+\newlabel{fig:lora_max_context_loss@cref}{{[figure][6][]6}{[1][16][]17}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Final model}{18}{subsection.5.3}\protected@file@percent }
+\newlabel{sec:final_model}{{5.3}{18}{Final model}{subsection.5.3}{}}
+\newlabel{sec:final_model@cref}{{[subsection][3][5]5.3}{[1][18][]18}}
+\@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces Final best hyperparameters for the model fine-tuned with LoRA on the dataset.}}{18}{table.10}\protected@file@percent }
+\newlabel{tab:lora_final_hyperparameters}{{10}{18}{Final best hyperparameters for the model fine-tuned with LoRA on the dataset}{table.10}{}}
+\newlabel{tab:lora_final_hyperparameters@cref}{{[table][10][]10}{[1][18][]18}}
+\@writefile{lot}{\contentsline {table}{\numberline {11}{\ignorespaces Metrics for the model fine-tuned with LoRA using the final best hyperparameters on a subset from the test set.}}{18}{table.11}\protected@file@percent }
+\newlabel{tab:lora_final_metrics}{{11}{18}{Metrics for the model fine-tuned with LoRA using the final best hyperparameters on a subset from the test set}{table.11}{}}
+\newlabel{tab:lora_final_metrics@cref}{{[table][11][]11}{[1][18][]18}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Training (top) and validation (middle) loss for the model fine-tuned with LoRA on the dataset using the final best hyperparameters. The bottom figure directly compares the training (blue) and validation (red) loss using the same resolution of every 50 steps.}}{19}{figure.7}\protected@file@percent }
+\newlabel{fig:lora_final_loss}{{7}{19}{Training (top) and validation (middle) loss for the model fine-tuned with LoRA on the dataset using the final best hyperparameters. The bottom figure directly compares the training (blue) and validation (red) loss using the same resolution of every 50 steps}{figure.7}{}}
+\newlabel{fig:lora_final_loss@cref}{{[figure][7][]7}{[1][18][]19}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Predictions (dashed) of the model fine-tuned with LoRA using the final best hyperparameters compared with the true (solid) values on a subset of the test set for both predator (purple) and prey (gold).}}{20}{figure.8}\protected@file@percent }
+\newlabel{fig:lora_final_pred}{{8}{20}{Predictions (dashed) of the model fine-tuned with LoRA using the final best hyperparameters compared with the true (solid) values on a subset of the test set for both predator (purple) and prey (gold)}{figure.8}{}}
+\newlabel{fig:lora_final_pred@cref}{{[figure][8][]8}{[1][18][]20}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Running mean squared error (RMSE) for the model fine-tuned with LoRA using the final best hyperparameters on a subset of the test set over the out-of-distribution data for the predator (purple) and prey (gold) time series.}}{21}{figure.9}\protected@file@percent }
+\newlabel{fig:lora_final_rmse}{{9}{21}{Running mean squared error (RMSE) for the model fine-tuned with LoRA using the final best hyperparameters on a subset of the test set over the out-of-distribution data for the predator (purple) and prey (gold) time series}{figure.9}{}}
+\newlabel{fig:lora_final_rmse@cref}{{[figure][9][]9}{[1][18][]21}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}FLOPS usage}{22}{section.6}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {12}{\ignorespaces FLOPS usage for each stage of the coursework including inference by the untrained model; training and inference of the LoRA adapted model with default hyperparameters; grid search of $\eta $, LoRA rank, and context length; and the training and inference of the final model.}}{22}{table.12}\protected@file@percent }
+\newlabel{tab:flops_track}{{12}{22}{FLOPS usage for each stage of the coursework including inference by the untrained model; training and inference of the LoRA adapted model with default hyperparameters; grid search of $\eta $, LoRA rank, and context length; and the training and inference of the final model}{table.12}{}}
+\newlabel{tab:flops_track@cref}{{[table][12][]12}{[1][22][]22}}
 \citation{hu2021loralowrankadaptationlarge}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Further improvements}{22}{section.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {8}Summary}{22}{section.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Further improvements}{23}{section.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {8}Summary}{23}{section.8}\protected@file@percent }
 \bibstyle{vancouver-authoryear}
 \bibdata{bibliography}
 \bibcite{gruver2024largelanguagemodelszeroshot}{{1}{2024}{{Gruver et~al.}}{{Nate Gruver and Marc Finzi and Shikai Qiu and Andrew Gordon Wilson}}}

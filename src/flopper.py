@@ -54,7 +54,7 @@ class Flopper:
             
         # Compute the RMS:
         flops = (m*n +      #square each element
-                 m*n-1 +    #summing of squared elements
+                 m*(n-1) +  #summing of squared elements
                  m +        #multiply by 1/hidden_size
                  m*10       #sqrt
         )
@@ -86,6 +86,7 @@ class Flopper:
         return flops
 
     def rope(self, m, n):
+        #self.hidden_size, self.sequence_length
         #cost of adding rotary positional embeddings
         flops = m*n
         return flops
@@ -100,8 +101,8 @@ class Flopper:
         if self.use_lora == False:
             flops = 3 * self.matrix_multiplication(self.sequence_length, self.hidden_size, self.head_dim, bias=True)
         else:
-            flops = 2 * self.lora(self.head_dim, self.lora_rank) #for q and v
-            flops += self.matrix_multiplication(self.sequence_length, self.hidden_size, self.head_dim, bias=True) #for k
+            flops = 2 * self.lora(self.head_dim, self.lora_rank) #for LoRA linear layers
+            flops += 3*self.matrix_multiplication(self.sequence_length, self.hidden_size, self.head_dim, bias=True) # q, k, v
         # attention score (matrix multiplication)
         flops += self.matrix_multiplication(self.sequence_length, self.head_dim, self.sequence_length, bias=False)
         # scaled self-attention (division and sqrt)
