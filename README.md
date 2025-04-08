@@ -22,7 +22,7 @@ Then install all necessary packages from the `requirements.txt` file:
 ```
 pip install -r requirements.txt
 ```
-Then, using Slurm and the provided `.wilkes3` submission script, jobs can be submitted to CSD3. It is recommended to use one node only as training is not particularly intensive.
+Then, using Slurm and the CSD3 provided `.wilkes3` submission script (not found in this repository), jobs can be submitted to CSD3. It is recommended to use one node only as training is not particularly intensive.
 
 Expected wall time:
 - `gridsearch.py`: ~45 minutes.
