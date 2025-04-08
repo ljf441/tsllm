@@ -18,9 +18,9 @@ Then activate it:
 ```
 conda activate lora
 ```
-Then install all necessary packages from the `req.txt` file:
+Then install all necessary packages from the `requirements.txt` file:
 ```
-pip install -r req.txt
+pip install -r requirements.txt
 ```
 Then, using Slurm and the provided `.wilkes3` submission script, jobs can be submitted to CSD3. It is recommended to use one node only as training is not particularly intensive.
 
