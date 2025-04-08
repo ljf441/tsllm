@@ -1,5 +1,5 @@
 # tsllm
-Training a Qwen2 0.5 B LLM to be able to predict Lotka-Volterra time series data.
+Training a LoRA-adapted Qwen2.5-0.5B-Instruct LLM to be able to predict Lotka-Volterra time series data.
 
 # how to run
 It is recommended to run this project within a virtual environment. To run the `.py` files using CSD3, it is recommended to follow the instructions for creating the `conda` environment and using it when submitting a job.
