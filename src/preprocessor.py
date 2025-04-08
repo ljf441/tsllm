@@ -2,7 +2,7 @@ import h5py
 import numpy as np
 import torch
 from sklearn.model_selection import train_test_split
-
+import re
 def get_dataset(file_path, system_id=0, points=100):
     """
     Load the Lotka-Volterra dataset from an HDF5 file and extract the prey and predator data.
@@ -80,22 +80,32 @@ def scale_and_encode(prey, predator, alpha, decimals):
 
 def decoding(data):
     """
-    Decode the encoded data back to prey and predator values.
+    Decode the encoded data back to prey and predator values, handling numeric extraction from strings.
     
     Args:
-        data (str): The encoded data string.
+        data (str): The encoded data string containing potential text labels.
         
     Returns:
         prey (np.ndarray): The decoded prey values.
         predator (np.ndarray): The decoded predator values.
     """
+    def extract_number(s):
+        """Extract first numeric value from string using regex."""
+        match = re.search(r"[-+]?\d*\.?\d+", s.strip())
+        if match:
+            return float(match.group())
+        return float(-99)
+
     time_steps = data.split(';')
-    decoded = np.array([list(map(float, step.split(','))) 
-                        for step in time_steps 
-                        if step.strip() 
-                        and len(step.split(',')) == 2 
-                        and all(value.strip() for value in step.split(','))]
-                        [:100])
+    
+    decoded = np.array([
+        list(map(extract_number, step.split(','))) 
+        for step in time_steps 
+        if step.strip()
+        and len(step.split(',')) == 2
+        and all(value.strip() for value in step.split(','))
+    ][:100])
+    
     prey = decoded[:, 0]
     predator = decoded[:, 1]
     return prey, predator
