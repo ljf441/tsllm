@@ -74,3 +74,7 @@ Auto-generation tools were used as follows:
 - Assistance in formatting the report in $\LaTeX$, specifically with tables and referencing.
 
 Auto-generation tools were not used elsewhere, for code generation, writing, or otherwise.
+
+# acknowledgements
+
+The $\LaTeX$ bibliography style was taken from https://github.com/gbhutani/vancouver_authoryear_bibstyle.git
