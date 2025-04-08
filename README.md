@@ -12,7 +12,7 @@ git checkout hpc
 ```
 Create an Anaconda `conda` environment:
 ```
-conda create --name lora --file req.txt
+conda create -n lora matplotlib numpy pytorch torchvision torchmetrics -c pytorch
 ```
 Then activate it:
 ```
