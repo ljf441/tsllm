@@ -43,7 +43,6 @@ This repository contains in the `src` folder:
     - `lora_default.ipynb` covering task 3a of the coursework.
     - `grid_search.ipynb` covering task 3b of the coursework.
     - `lora_final.ipynb` covering task 3c of the coursework.
-    - ...
 2. `.py` files:
     - `qwen.py` and `lora_skeleton.py`, which were provided.
     - `preprocessor.py` covering task 2a of the coursework.
