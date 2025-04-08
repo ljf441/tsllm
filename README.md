@@ -23,6 +23,10 @@ pip install -r requirements.txt
 ## Anaconda
 Create the conda environment:
 ```
+conda env create -f environment.yml
+```
+or:
+```
 conda create -n lora matplotlib numpy pytorch torchvision torchmetrics -c pytorch
 ```
 Then activate:
