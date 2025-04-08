@@ -1,4 +1,4 @@
-name: project
+name: lora
 channels:
   - pytorch
   - defaults
