@@ -2,6 +2,14 @@
 This branch is designed to be used on CSD3, such that all other extraneous folders have been removed.
 
 # how to use
+Login onto CSD3. Git clone this repository.
+```
+git clone https://gitlab.developers.cam.ac.uk/phy/data-intensive-science-mphil/assessments/m2_coursework/lj441.git
+```
+Then, checkout to the `hpc` branch:
+```
+git checkout hpc
+```
 Create an Anaconda `conda` environment:
 ```
 conda create -n lora matplotlib numpy pytorch torchvision torchmetrics -c pytorch 
