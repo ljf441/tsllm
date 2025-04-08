@@ -25,3 +25,4 @@ plots/sweet*
 plots/trim*
 plots/driven*
 src/notebooks/*
+src/test_set.py
