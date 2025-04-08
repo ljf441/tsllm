@@ -23,15 +23,15 @@ pip install -r requirements.txt
 ## Anaconda
 Create the conda environment:
 ```
-conda create -n lora matplotlib numpy pytorch torchvision torchmetrics -c pytorch 
+conda create --name lora --file req.txt
 ```
 Then activate:
 ```
 conda activate lora
 ```
-Then install all necessary packages from the `req.txt` file:
+Then install all necessary packages from the `requirements.txt` file:
 ```
-pip install -r req.txt
+pip install -r requirements.txt
 ```
 
 # within
