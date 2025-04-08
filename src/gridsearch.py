@@ -15,20 +15,8 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 
-from torch.optim.lr_scheduler import StepLR, CosineAnnealingLR
-from transformers import get_cosine_schedule_with_warmup
-from preprocessor import get_dataset
-
-import wandb
-import joblib
-
-from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import matplotlib.pyplot as plt
 
-
-import gc
-
-import os
 import glob
 import re
 
@@ -102,16 +90,15 @@ def process_sequences(texts, tokenizer, max_length=512, stride=256):
 # Process the testing data into sequences of text as well as input IDs
 def process_data(texts, tokenizer, points=80):
     """
-    Process the data into sequences of text
-    
+    Process test data into sequences of text and tokenize them.
+
     Args:
-        texts: list of original strings
-        tokenizer: tokenizer object
-        points: number of points to give to the model
-        
+        texts (list): List of text sequences.
+        tokenizer (Tokenizer): Tokenizer to use for processing.
+        points (int): Number of points to consider.
+
     Returns:
-        np.array: texts
-        torch.Tensor: given_input_ids
+        tuple: Tuple containing the processed texts and their corresponding tokenized input IDs.
     """
     given_input_ids = []
     for text in texts:
@@ -119,22 +106,6 @@ def process_data(texts, tokenizer, points=80):
         encoding_given = tokenizer(given_text, return_tensors="pt", padding='max_length', padding_side='left', max_length=1200)
         given_input_ids.append(encoding_given.input_ids[0])
     return np.stack([text for text in texts]), torch.stack(given_input_ids)
-
-def running_mse(prediction, actual):
-    """
-    Calculate the running mean squared error.
-
-    Args:
-        prediction: list of predicted values
-        actual: list of actual values
-
-    Returns:
-        np.array: running mean squared error
-    """
-    mse = []
-    for i in range(len(prediction)):
-        mse.append(mean_squared_error(prediction[:i+1], actual[:i+1]))
-    return np.array(mse)
 
 def evaluate_model(model, val_loader, step):
     """
@@ -160,23 +131,34 @@ def evaluate_model(model, val_loader, step):
     # Calculate metrics
     num_batches = len(val_loader)
     avg_loss = total_loss / len(val_loader)
-    # print(f'Loss on validation subset ({num_batches}/{len(val_loader)} batches) at step {step}: {avg_loss:.4f}')
+    print(f'Loss on validation subset ({num_batches}/{len(val_loader)} batches) at step {step}: {avg_loss:.4f}')
     return avg_loss
 
 def move_to_cpu(obj):
-    """Recursively convert tensors to CPU NumPy arrays."""
+    """
+    Recursively convert tensors to CPU NumPy arrays.
+    
+    Args:
+        obj (any): Input object (tensor, NumPy array, list, dict, etc.).
+    Returns:
+        obj (any): Object moved to CPU.
+    """
     if isinstance(obj, torch.Tensor):
         # Move tensor to CPU and convert to NumPy
         return obj.detach().cpu().numpy()
+    
     elif isinstance(obj, np.ndarray):
         # Already a NumPy array (no action needed)
         return obj
+    
     elif isinstance(obj, dict):
-        # Process dictionary values
+        # Process dictionary values and recursively move to cpu
         return {k: move_to_cpu(v) for k, v in obj.items()}
+    
     elif isinstance(obj, Iterable) and not isinstance(obj, str):
         # Process lists, tuples, etc.
         return type(obj)(move_to_cpu(v) for v in obj)
+    
     else:
         # Return Python primitives (int, float, etc.) as-is
         return obj
@@ -227,10 +209,6 @@ for rank in lora_ranks:
 
         # Dictionary to store results
         grid_results = {}
-
-        # print(f"\n{'='*50}")
-        # print(f"Training with lora_rank={lora_rank}, learning_rate={learning_rate}")
-        # print(f"{'='*50}\n")
 
         # Actually apply LoRA to the model:
         for layer in model.model.layers:
@@ -344,8 +322,6 @@ for rank in lora_ranks:
 
         # Save results
         torch.save(grid_results, f"../results/grid_results_{lora_rank}_{learning_rate}.pt")
-        # joblib.dump(grid_results, f"../results/grid_results_{lora_rank}_{learning_rate}.gz", compress=3)
-
 
         del train_losses
         del val_losses
@@ -390,11 +366,6 @@ for file_path in result_files:
     if result[key]['final_val_loss'] < best_val_loss:
         best_val_loss = result[key]['final_val_loss']
         best_lora_lr = key
-
-print(f"\n{'='*50}")
-print(f"Best validation loss: {best_val_loss}")
-print(f"Best file: {best_lora_lr}")
-print(f"{'='*50}")
 
 best_overall_params['lora_rank'] = best_lora_lr[0]
 best_overall_params['learning_rate'] = best_lora_lr[1]
@@ -442,10 +413,6 @@ for ctx_length in ctx_lengths:
 
     # Dictionary to store results
     grid_results = {}
-
-    # print(f"\n{'='*50}")
-    # print(f"Training with max_ctx_length={max_ctx_length}")
-    # print(f"{'='*50}\n")
 
     # Actually apply LoRA to the model:
     for layer in model.model.layers:
@@ -560,7 +527,6 @@ for ctx_length in ctx_lengths:
 
     # Save results
     torch.save(grid_results, f"../results/grid_results_{max_ctx_length}.pt")
-    # joblib.dump(grid_results, f"../results/grid_results_{max_ctx_length}.gz", compress=3)
     
     del train_losses
     del val_losses
@@ -604,15 +570,8 @@ for file_path in result_files:
         best_val_loss = result[key]['final_val_loss']
         best_ctx = key
 
-print(f"\n{'='*50}")
-print(f"Best validation loss: {best_val_loss}")
-print(f"Best file: {best_ctx}")
-print(f"{'='*50}")
-
 best_overall_params['max_ctx_length'] = best_ctx
 
 best_overall_params_cpu = move_to_cpu(best_overall_params)
 
 torch.save(best_overall_params_cpu, "../results/best_overall_params.pt")
-
-# joblib.dump(best_overall_params, "../results/best_overall_params.joblib")
