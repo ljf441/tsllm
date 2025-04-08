@@ -1,8 +1,6 @@
 # This file may be used to create an environment using:
 # $ conda create --name <env> --file <this file>
 # platform: linux-64
-_libgcc_mutex=0.1=main
-accelerate=1.5.2=pypi_0
 aiohappyeyeballs=2.6.1=pypi_0
 aiohttp=3.11.14=pypi_0
 aiosignal=1.3.2=pypi_0
